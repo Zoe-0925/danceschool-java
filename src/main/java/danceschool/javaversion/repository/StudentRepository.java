@@ -11,10 +11,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface StudentRepository
   extends PagingAndSortingRepository<Student, Long> {
-  @Query("select u from Student u where u.name=:name")
+  @Query("select u from Student u where u.userName like :name")
   Page<Post> findByName(@Param("name") String name, Pageable pageReq);
 
   default Page<Post> findByName(Student Student, Pageable pageReq) {
-    return findByUser(Student.getName(), pageReq);
+    return findByUser(Student.getUserName(), pageReq);
   }
 }
