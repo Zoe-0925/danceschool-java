@@ -1,4 +1,4 @@
-package danceschool.javaversion.model;
+package danceschool.javaversion.dto;
 
 import java.util.ArrayList;
 import lombok.Data;

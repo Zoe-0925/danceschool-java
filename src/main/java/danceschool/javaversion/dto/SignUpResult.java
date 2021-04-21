@@ -1,4 +1,4 @@
-package danceschool.javaversion.model;
+package danceschool.javaversion.dto;
 
 
 import lombok.Data;
