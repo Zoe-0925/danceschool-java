@@ -14,17 +14,21 @@ public class SubscriptionService {
 
   @Autowired
   SubscriptionRepository repository;
+  
+  public List<Subscription> getAll() {
+    List<Subscription> classes = new ArrayList<Subscription>();
 
-  public List<Subscription> findAllSubscriptions() {
-    List<Subscription> SubscriptionList = repository.findAll();
+    // sort=[field, direction]
+    classes.add(new Subscription(getSortDirection(sort[1]), sort[0]));
 
-    if (SubscriptionList.size() > 0) {
-      return SubscriptionList;
-    } else {
-      return new ArrayList<Subscription>();
-    }
+    Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
+
+    Page<Subscription> pages = repository.findAll(pageReq);
+
+    //TODO DTO
+
+    return pages.getContent();
   }
-
   public Subscription createOrUpdateSubscription(Subscription entity)
     throws RecordNotFoundException {
     Optional<Subscription> subscription = repository.findById(entity.getId());
@@ -34,7 +38,7 @@ public class SubscriptionService {
       newEntity.setStartDate(entity.getStartDate());
       newEntity.setNextBillingDate(entity.getNextBillingDate());
       newEntity.setCanceled(entity.getCanceled());
-      newEntity.setStudentID(entity.getStudentID());
+      newEntity.setStudentID(entity.getsetStudentID());
       newEntity.setMembershipName(entity.getMembershipName());
 
       newEntity = repository.save(newEntity);

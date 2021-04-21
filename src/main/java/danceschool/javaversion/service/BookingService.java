@@ -15,12 +15,19 @@ public class Bookingervice {
   @Autowired
   BookingRepository repository;
 
-  public List<Booking> getAll() {
-    List<Booking> bookingList = repository.findAll();
+  public List<Booking> getAll(int page, int size, String[] sort) {
+    List<Booking> bookings = new ArrayList<Booking>();
+
+    // sort=[field, direction]
+    bookings.add(new Booking(getSortDirection(sort[1]), sort[0]));
+
+    Pageable pagingSort = PageRequest.of(page, size, Sort.by(bookings));
+
+    Page<Booking> pages = repository.findAll(pageReq);
 
     //TODO DTO
 
-    return bookingList;
+    return bookingList.getContent();
   }
 
   //TODO
@@ -63,9 +70,9 @@ public class Bookingervice {
 
       newEntity = repository.save(newEntity);
 
-      return newEntity;
+      return true;
     } else {
-      return null;
+      return false;
     }
   }
 

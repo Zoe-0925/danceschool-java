@@ -15,14 +15,19 @@ public class StudentService {
   @Autowired
   StudentRepository repository;
 
-  public List<Student> findAllStudents() {
-    List<Student> studentList = repository.findAll();
+  public List<Student> getAll() {
+    List<Student> classes = new ArrayList<Student>();
 
-    if (studentList.size() > 0) {
-      return studentList;
-    } else {
-      return new ArrayList<Student>();
-    }
+    // sort=[field, direction]
+    classes.add(new Student(getSortDirection(sort[1]), sort[0]));
+
+    Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
+
+    Page<Student> pages = repository.findAll(pageReq);
+
+    //TODO DTO
+
+    return pages.getContent();
   }
 
   //TODO

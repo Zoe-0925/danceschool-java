@@ -23,15 +23,18 @@ public class DanceClassController {
   @Autowired
   DanceClassService service;
 
-  @GetMapping
-  public List<DanceClass> findAllDanceClasss(
+  @GetMapping("page/{pageNumber}/size/{pageSize}/")
+  public ResponseEntity findAllDanceClasss(
     @PathVariable("pageNumber") int pageNumber,
     @PathVariable("pageSize") int pageSize
   ) {
+    String[] sort = { "startDate,desc" };
     PaginationFilter filter = new PaginationFilter(pageNumber, pageSize);
-    List<Booking> list = service.getAll(
+
+    List<DanceClass> list = service.getAll(
       filter.getPageNumber(),
-      filter.getPageSize()
+      filter.getPageSize(),
+      sort
     );
 
     if (list == null) {

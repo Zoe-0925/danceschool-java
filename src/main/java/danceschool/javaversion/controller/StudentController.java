@@ -23,15 +23,17 @@ public class StudentController {
   @Autowired
   StudentService service;
 
-  @GetMapping
-  public List<Student> findAllStudents(
+  @GetMapping("page/{pageNumber}/size/{pageSize}/")
+  public ResponseEntity findAllStudents(
     @PathVariable("pageNumber") int pageNumber,
     @PathVariable("pageSize") int pageSize
   ) {
+    String[] sort = { "name,asc" };
     PaginationFilter filter = new PaginationFilter(pageNumber, pageSize);
     List<Student> list = service.getAll(
       filter.getPageNumber(),
-      filter.getPageSize()
+      filter.getPageSize(),
+      sort
     );
 
     if (list == null) {
@@ -42,9 +44,7 @@ public class StudentController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Student> findStudentById(
-    @PathVariable(value = "id") long id
-  ) {
+  public ResponseEntity findStudentById(@PathVariable(value = "id") long id) {
     // Implement
   }
 

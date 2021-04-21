@@ -42,6 +42,27 @@ public class CourseController {
     }
   }
 
+  @GetMapping("page/{pageNumber}/size/{pageSize}/")
+  public ResponseEntity findAllBookings(
+    @PathVariable(defaultValue = "1") int pageNumber,
+    @PathVariable(defaultValue = "8") int pageSize
+  ) {
+    String[] sort = { "name,asc" };
+    PaginationFilter filter = new PaginationFilter(pageNumber, pageSize);
+
+    List<Course> list = service.getAll(
+      filter.getPageNumber(),
+      filter.getPageSize(),
+      sort
+    );
+
+    if (list == null) {
+      return ResponseEntity.notFound().build();
+    } else {
+      return ResponseEntity.ok(list);
+    }
+  }
+
   @GetMapping("/{id}")
   public ResponseEntity<Course> findCourseById(
     @PathVariable(value = "id") long id

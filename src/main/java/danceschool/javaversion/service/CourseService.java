@@ -10,19 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Courseervice {
+public class CourseService {
 
   @Autowired
   CourseRepository repository;
 
-  public List<Course> findAllCourses() {
-    List<Course> courseList = repository.findAll();
+  public List<Course> getAll() {
+    List<Course> courses = new ArrayList<Course>();
 
-    if (courseList.size() > 0) {
-      return courseList;
-    } else {
-      return new ArrayList<Course>();
-    }
+    // sort=[field, direction]
+    courses.add(new Course(getSortDirection(sort[1]), sort[0]));
+
+    Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
+
+    Page<Course> pages = repository.findAll(pageReq);
+
+    //TODO DTO
+
+    return pages.getContent();
   }
 
   //TODO

@@ -27,13 +27,16 @@ public class BookingController {
 
   @GetMapping("page/{pageNumber}/size/{pageSize}/")
   public ResponseEntity findAllBookings(
-    @PathVariable("pageNumber") int pageNumber,
-    @PathVariable("pageSize") int pageSize
+    @PathVariable(defaultValue = "1") int pageNumber,
+    @PathVariable(defaultValue = "8") int pageSize
   ) {
+    String[] sort = { "bookingDate,desc" };
     PaginationFilter filter = new PaginationFilter(pageNumber, pageSize);
-    List<Booking> list = service.getAllBookings(
+
+    List<Booking> list = service.getAll(
       filter.getPageNumber(),
-      filter.getPageSize()
+      filter.getPageSize(),
+      sort
     );
 
     if (list == null) {

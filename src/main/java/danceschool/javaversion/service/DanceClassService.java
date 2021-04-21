@@ -15,16 +15,19 @@ public class DanceClasservice {
   @Autowired
   DanceClassRepository repository;
 
-  public List<DanceClass> findAllDanceClasses() {
-    List<DanceClass> danceClassList = repository.findAll();
+  public List<DanceClass> getAll() {
+    List<DanceClass> classes = new ArrayList<DanceClass>();
+
+    // sort=[field, direction]
+    classes.add(new DanceClass(getSortDirection(sort[1]), sort[0]));
+
+    Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
+
+    Page<DanceClass> pages = repository.findAll(pageReq);
 
     //TODO DTO
 
-    if (danceClassList.size() > 0) {
-      return danceClassList;
-    } else {
-      return new ArrayList<DanceClass>();
-    }
+    return pages.getContent();
   }
 
   //TODO
@@ -36,8 +39,7 @@ public class DanceClasservice {
     return created.getId();
   }
 
-  public DanceClass Update(DanceClass entity)
-    throws RecordNotFoundException {
+  public DanceClass Update(DanceClass entity) throws RecordNotFoundException {
     Optional<DanceClass> DanceClass = repository.findById(entity.getId());
 
     if (DanceClass.isPresent()) {
