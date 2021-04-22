@@ -26,6 +26,7 @@ public class BookingController {
   BookingService service;
 
   @GetMapping("page/{pageNumber}/size/{pageSize}/")
+  @Cacheable("bookings")
   public ResponseEntity findAllBookings(
     @PathVariable(defaultValue = "1") int pageNumber,
     @PathVariable(defaultValue = "8") int pageSize

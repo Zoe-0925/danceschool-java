@@ -8,8 +8,13 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.CacheEvict;
 
 @Service
+@CacheConfig
 public class Instructorervice {
 
   @Autowired
@@ -30,10 +35,13 @@ public class Instructorervice {
   //TODO
   public List<Instructor> findByName(String name) {}
 
-  public int create(Instructor entity) {
-    Instructor created = repository.save(entity);
-
-    return created.getId();
+  public int create(Instructor entity) throws Exception {
+    try {
+      entity = repository.save(entity);
+      return entity.getId();
+    } catch (Exception e) {
+      throw e;
+    }
   }
 
   public Instructor Update(Instructor entity) throws RecordNotFoundException {
@@ -53,6 +61,7 @@ public class Instructorervice {
     }
   }
 
+  @CacheEvict(allEntries = true)
   public void deleteInstructor(int id) throws RecordNotFoundException {
     Optional<Instructor> Instructor = repository.findById(id);
 

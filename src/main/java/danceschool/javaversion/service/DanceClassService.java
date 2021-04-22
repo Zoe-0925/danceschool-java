@@ -2,20 +2,31 @@ package danceschool.javaversion.service;
 
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.helper.SortDirection;
+import danceschool.javaversion.model.Course;
 import danceschool.javaversion.model.DanceClass;
+import danceschool.javaversion.repository.CourseRepository;
 import danceschool.javaversion.repository.DanceClassRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
+@CacheConfig(cacheNames = { "_classes_" }) // tells Spring where to store
 public class DanceClasservice {
 
   @Autowired
   DanceClassRepository repository;
 
+  @Autowired
+  CourseRepository courseRepository;
+
+  @Cacheable
   public List<DanceClass> getAll() {
     List<DanceClass> classes = new ArrayList<DanceClass>();
 
@@ -34,14 +45,23 @@ public class DanceClasservice {
   }
 
   //TODO
+  @Cacheable
   public List<DanceClass> findByCourse(int id) {}
 
-  public int create(DanceClass entity) {
-    DanceClass created = repository.save(entity);
+  @CachePut
+  public int create(DanceClass entity) throws Exception {
+    try {
+      entity = repository.save(entity);
+      Course course = courseRepository.findById(entity.getCourseID);
+      course.getDanceClassess.add(entity);
 
-    return created.getId();
+      return entity.getId();
+    } catch (Exception e) {
+      throw e;
+    }
   }
 
+  @CachePut
   public DanceClass Update(DanceClass entity) throws RecordNotFoundException {
     Optional<DanceClass> DanceClass = repository.findById(entity.getId());
 
@@ -60,11 +80,14 @@ public class DanceClasservice {
     }
   }
 
+  @CacheEvict(allEntries = true)
   public void delete(int id) throws RecordNotFoundException {
     Optional<DanceClass> DanceClass = repository.findById(id);
 
     if (DanceClass.isPresent()) {
       repository.deleteById(id);
+      Course course = courseRepository.findById(entity.getCourseID);
+      course.getDanceClassess.remove(entity);
     } else {
       throw new RecordNotFoundException(
         "No DanceClass record exist for given id"

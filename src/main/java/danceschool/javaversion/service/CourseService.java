@@ -8,14 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
+@CacheConfig(cacheNames = { "_courses_" }) // tells Spring where to store
 public class CourseService {
 
   @Autowired
   CourseRepository repository;
 
+  @Cacheable
   public List<Course> getAll() {
     List<Course> courses = new ArrayList<Course>();
 
@@ -32,8 +38,10 @@ public class CourseService {
   }
 
   //TODO
+  @Cacheable
   public List<Course> findByName(String name) {}
 
+  @Cacheable
   public CourseWithCountDTO findWithCount() {
     List<Course> CourseList = repository.findAll();
 
@@ -44,11 +52,17 @@ public class CourseService {
     }
   }
 
-  public int create(Course entity) {
-    Course created = repository.save(entity);
-    return created.getId();
+  @CachePut
+  public int create(Course entity) throws Exception {
+    try {
+      entity = repository.save(entity);
+      return entity.getId();
+    } catch (Exception e) {
+      throw e;
+    }
   }
 
+  @CachePut
   public Course Update(Course entity) throws RecordNotFoundException {
     Optional<Course> Course = repository.findById(entity.getId());
 
@@ -67,6 +81,7 @@ public class CourseService {
     }
   }
 
+  @CacheEvict(allEntries = true)
   public void delete(int id) throws RecordNotFoundException {
     Optional<Course> Course = repository.findById(id);
 

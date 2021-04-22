@@ -12,6 +12,7 @@ import lombok.Data;
 
 @Table(name = "Membership")
 @Data
+@RedisHash("_memberships_")
 public class Membership {
 
   @Id

@@ -11,6 +11,6 @@ public interface CourseRepository
   Page<Post> findByName(@Param("name") String name, Pageable pageReq);
 
   default Page<Post> findByName(Course course, Pageable pageReq) {
-    return findByUser(course.getName(), pageReq);
+    return findByName(course.getName(), pageReq);
   }
 }

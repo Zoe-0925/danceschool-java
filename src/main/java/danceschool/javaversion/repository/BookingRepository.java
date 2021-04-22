@@ -6,4 +6,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 @Repository
 public interface BookingRepository
-  extends PagingAndSortingRepository<Booking, Long> {}
+  extends PagingAndSortingRepository<Booking, Long> {
+
+}

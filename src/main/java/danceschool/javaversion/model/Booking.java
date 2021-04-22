@@ -9,10 +9,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Table(name = "Booking")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@RedisHash("_bookings_")
 public class Booking {
 
   @Id

@@ -16,6 +16,7 @@ import lombok.Data;
 
 @Table(name = "DanceClass")
 @Data
+@RedisHash("_classes_")
 public class DanceClass {
 
   @Id

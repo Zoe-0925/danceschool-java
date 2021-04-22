@@ -13,6 +13,7 @@ import lombok.Data;
 @Entity
 @Table(name = "Course")
 @Data
+@RedisHash("_courses_")
 public class Course {
 
   @Id
