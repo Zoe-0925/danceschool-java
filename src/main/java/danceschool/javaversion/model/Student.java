@@ -32,4 +32,9 @@ public class Student {
 
   @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
   Set bookings = new HashSet();
+
+  public Student(String userName, String email) {
+    this.userName = userName;
+    this.email = email;
+  }
 }

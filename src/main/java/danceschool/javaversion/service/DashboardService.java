@@ -13,7 +13,7 @@ import org.springframework.cache.annotation.Cacheable;
 
 @Service
 @CacheConfig
-public class Dashboardervice {
+public class DashboardService {
 
   @Autowired
   DashboardRepository repository;

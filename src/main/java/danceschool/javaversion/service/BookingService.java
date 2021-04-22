@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @CacheConfig(cacheNames = { "_bookings_" }) // tells Spring where to store
-public class Bookingervice {
+public class BookingService {
 
   @Autowired
   BookingRepository repository;

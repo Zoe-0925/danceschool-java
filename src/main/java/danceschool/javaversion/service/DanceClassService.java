@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @CacheConfig(cacheNames = { "_classes_" }) // tells Spring where to store
-public class DanceClasservice {
+public class DanceClassService {
 
   @Autowired
   DanceClassRepository repository;

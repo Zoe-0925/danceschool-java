@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @CacheConfig
-public class Instructorervice {
+public class InstructorService {
 
   @Autowired
   InstructorRepository repository;

@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
 
-@Entity
 @Table(name = "Course")
 @Data
 @RedisHash("_courses_")
