@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -33,5 +34,6 @@ public class Course {
   @NotNull
   public int bookingLimit;
 
-  public ArrayList<DanceClass> danceClasses;
+  @OneToMany(mappedBy = "danceClass", cascade = CascadeType.ALL)
+  Set danceClasses = new HashSet();
 }

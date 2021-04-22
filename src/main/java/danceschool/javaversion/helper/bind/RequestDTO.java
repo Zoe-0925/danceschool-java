@@ -1,4 +1,4 @@
-package danceschool.javaversion.dto;
+package danceschool.javaversion.helper.bind;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

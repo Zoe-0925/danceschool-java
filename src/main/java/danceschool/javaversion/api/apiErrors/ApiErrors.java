@@ -1,4 +1,4 @@
-package danceschool.javaversion.api;
+package danceschool.javaversion.api.apiErrors;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +14,7 @@ public class ApiError {
   public String statusDescription;
 
   public String message;
+
 
   public ApiError(int statusCode, String statusDescription) {
     this.statusCode = statusCode;

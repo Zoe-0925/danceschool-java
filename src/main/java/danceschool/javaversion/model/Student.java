@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -25,7 +26,9 @@ public class Student {
   @Size(max = 40)
   private String email;
 
-  private ArrayList<Subscription> subscription;
+  @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL)
+  Set subscription = new HashSet();
 
-  private ArrayList<Booking> bookings;
+  @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+  Set bookings = new HashSet();
 }
