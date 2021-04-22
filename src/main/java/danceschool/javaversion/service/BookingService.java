@@ -1,5 +1,7 @@
 package danceschool.javaversion.service;
 
+
+import danceschool.javaversion.helper.SortDirection;
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.model.Booking;
 import danceschool.javaversion.repository.BookingRepository;
@@ -19,7 +21,7 @@ public class Bookingervice {
     List<Booking> bookings = new ArrayList<Booking>();
 
     // sort=[field, direction]
-    bookings.add(new Booking(getSortDirection(sort[1]), sort[0]));
+    bookings.add(new Booking(SortDirection.getSortDirection(sort[1]), sort[0]));
 
     Pageable pagingSort = PageRequest.of(page, size, Sort.by(bookings));
 

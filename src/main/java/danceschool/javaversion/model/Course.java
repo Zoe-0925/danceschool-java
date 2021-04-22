@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
@@ -16,14 +18,19 @@ public class Course {
   @GeneratedValue(strategy = GenerationType.AUTO)
   public int ID;
 
-  public String nme;
+  @NotNull
+  @Size(max = 50)
+  public String name;
 
+  @NotNull
   public double price;
 
   public Instructor instructor;
 
+  @NotNull
   public int instructorID;
 
+  @NotNull
   public int bookingLimit;
 
   public ArrayList<DanceClass> danceClasses;

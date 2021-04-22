@@ -1,7 +1,8 @@
 package danceschool.javaversion.service;
 
-import danceschool.javaversion.model.Subscription;
 import danceschool.javaversion.exception.RecordNotFoundException;
+import danceschool.javaversion.helper.SortDirection;
+import danceschool.javaversion.model.Subscription;
 import danceschool.javaversion.repository.SubscriptionRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +15,14 @@ public class SubscriptionService {
 
   @Autowired
   SubscriptionRepository repository;
-  
+
   public List<Subscription> getAll() {
     List<Subscription> classes = new ArrayList<Subscription>();
 
     // sort=[field, direction]
-    classes.add(new Subscription(getSortDirection(sort[1]), sort[0]));
+    classes.add(
+      new Subscription(SortDirection.getSortDirection(sort[1]), sort[0])
+    );
 
     Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
 
@@ -29,6 +32,7 @@ public class SubscriptionService {
 
     return pages.getContent();
   }
+
   public Subscription createOrUpdateSubscription(Subscription entity)
     throws RecordNotFoundException {
     Optional<Subscription> subscription = repository.findById(entity.getId());
@@ -63,4 +67,3 @@ public class SubscriptionService {
     }
   }
 }
-

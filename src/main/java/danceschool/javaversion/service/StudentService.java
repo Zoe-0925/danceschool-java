@@ -1,6 +1,7 @@
 package danceschool.javaversion.service;
 
 import danceschool.javaversion.exception.RecordNotFoundException;
+import danceschool.javaversion.helper.SortDirection;
 import danceschool.javaversion.model.Student;
 import danceschool.javaversion.repository.StudentRepository;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class StudentService {
     List<Student> classes = new ArrayList<Student>();
 
     // sort=[field, direction]
-    classes.add(new Student(getSortDirection(sort[1]), sort[0]));
+    classes.add(new Student(SortDirection.getSortDirection(sort[1]), sort[0]));
 
     Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
 
