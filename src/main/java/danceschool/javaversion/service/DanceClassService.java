@@ -1,5 +1,6 @@
 package danceschool.javaversion.service;
 
+import danceschool.javaversion.dto.DanceClassDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.helper.SortDirection;
 import danceschool.javaversion.model.Course;
@@ -37,11 +38,24 @@ public class DanceClasservice {
 
     Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
 
-    Page<DanceClass> pages = repository.findAll(pageReq);
+    Page<DanceClass> result = repository
+      .findAll(pageReq)
+      .getContent()
+      .stream()
+      .map(this::convertToDanceClassDTO)
+      .collect(Collectors.toList());
 
-    //TODO DTO
+    return result;
+  }
 
-    return pages.getContent();
+  private DanceClassDTO convertToDanceClassDTO(DanceClass danceClass) {
+    DanceClassDTO danceClassDTO = new DanceClassDTO();
+    danceClassDTO.setId(danceClass.getId());
+    danceClassDTO.setStartTime(danceClass.getStartTime());
+    danceClassDTO.setEndTime(danceClass.getEndTime());
+    danceClassDTO.setName(danceClass.getName());
+
+    return danceClassDTO;
   }
 
   //TODO

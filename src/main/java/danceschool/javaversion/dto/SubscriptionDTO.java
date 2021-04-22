@@ -6,15 +6,15 @@ import lombok.Data;
 @Data
 public class SubscriptionDTO {
 
-  private int ID;
+  private int id;
 
-  private LocalDateTime StartDate;
+  private LocalDateTime startDate;
 
-  private LocalDateTime NextBillingDate;
+  private LocalDateTime nextBillingDate;
 
-  private boolean Canceled;
+  private boolean canceled;
 
-  private String StudentName;
+  private String studentName;
 
-  private String MembershipName;
+  private String membershipName;
 }

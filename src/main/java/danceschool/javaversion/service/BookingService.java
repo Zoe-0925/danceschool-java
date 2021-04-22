@@ -1,5 +1,6 @@
 package danceschool.javaversion.service;
 
+import danceschool.javaversion.dto.BookingDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.helper.SortDirection;
 import danceschool.javaversion.model.Booking;
@@ -31,7 +32,7 @@ public class Bookingervice {
   DanceClassRepository danceClassRepository;
 
   @Cacheable // caches the result of findAll() method
-  public List<Booking> getAll(int page, int size, String[] sort) {
+  public List<BookingDTO> getAll(int page, int size, String[] sort) {
     List<Booking> bookings = new ArrayList<Booking>();
 
     // sort=[field, direction]
@@ -39,10 +40,26 @@ public class Bookingervice {
 
     Pageable pagingSort = PageRequest.of(page, size, Sort.by(bookings));
 
-    Page<Booking> pages = repository.findAll(pageReq).forEach(_bookings_::add);
-    //TODO DTO
+    Page<Booking> bookingList = repository
+      .findAll(pageReq)
+      .getContent()
+      .stream()
+      .map(this::convertToBookingDTO)
+      .collect(Collectors.toList());
 
-    return bookingList.getContent();
+    return bookingList;
+  }
+
+  private BookingDTO convertToBookingDTO(Booking booking) {
+    BookingDTO bookingDTO = new BookingDTO();
+    bookingDTO.setId(booking.getId());
+    bookingDTO.setBookingDate(booking.getBookingDate());
+    bookingDTO.setDate(booking.getDate());
+    bookingDTO.setClassID(booking.getClassID());
+    bookingDTO.setStudentEmail(booking.getStudent().getEmail());
+    bookingDTO.setCourseName(booking.getDanceClass().getCourseName());
+
+    return bookingDTO;
   }
 
   //TODO
@@ -67,7 +84,9 @@ public class Bookingervice {
 
   //TODO
   @Cacheable
-  public int findBookingCountByMonth() {}
+  public int findBookingCountByMonth() {
+    
+  }
 
   //TODO
   @Cacheable

@@ -30,11 +30,23 @@ public class StudentService {
 
     Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
 
-    Page<Student> pages = repository.findAll(pageReq);
-
-    //TODO DTO
+    Page<Student> pages = repository
+      .findAll(pageReq)
+      .stream()
+      .map(this::convertToStudentDTO)
+      .collect(Collectors.toList());
 
     return pages.getContent();
+  }
+
+  private StudentDTO convertToStudentDTO(Student student) {
+    StudentDTO studentDTO = new StudentDTO();
+    studentDTO.setId(student.getId());
+    studentDTO.setUserName(student.getUserName());
+    studentDTO.setEmail(student.getEmail());
+    studentDTO.setMembership(student.getMembership());
+
+    return studentDTO;
   }
 
   //TODO

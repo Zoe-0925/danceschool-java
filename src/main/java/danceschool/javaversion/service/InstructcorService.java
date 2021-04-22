@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
 @Service
 @CacheConfig
@@ -22,9 +22,6 @@ public class Instructorervice {
 
   public List<Instructor> findAllInstructors() {
     List<Instructor> instructorList = repository.findAll();
-
-    //TODO DTO
-
     if (instructorList.size() > 0) {
       return InstructorList;
     } else {
@@ -57,7 +54,9 @@ public class Instructorervice {
 
       return newEntity;
     } else {
-      return null;
+      throw new RecordNotFoundException(
+        "No Instructor record exist for given id"
+      );
     }
   }
 

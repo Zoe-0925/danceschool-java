@@ -37,11 +37,24 @@ public class SubscriptionService {
 
     Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
 
-    Page<Subscription> pages = repository.findAll(pageReq);
-
-    //TODO DTO
+    Page<Subscription> pages = repository
+      .findAll(pageReq)
+      .stream()
+      .map(this::convertToSubscriptionDTO)
+      .collect(Collectors.toList());
 
     return pages.getContent();
+  }
+
+  private SubscriptionDTO convertToSubscriptionDTO(Subscription subscription) {
+    SubscriptionDTO SubscriptionDTO = new SubscriptionDTO();
+    SubscriptionDTO.setId(subscription.getId());
+    SubscriptionDTO.setStartDate(subscription.getStartDate());
+    SubscriptionDTO.setCanceled(subscription.getCanceled());
+    SubscriptionDTO.setStudentName(subscription.getStudent().getUserName());
+    SubscriptionDTO.setMembershipName(subscription.getMembership().getName());
+
+    return SubscriptionDTO;
   }
 
   @CachePut

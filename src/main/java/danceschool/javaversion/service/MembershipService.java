@@ -1,5 +1,6 @@
 package danceschool.javaversion.service;
 
+import danceschool.javaversion.dto.MembershipDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.model.Membership;
 import danceschool.javaversion.repository.MembershipRepository;
@@ -22,22 +23,30 @@ public class MembershipService {
 
   @Cacheable
   public List<Membership> findAllMemberships() {
-    List<Membership> MembershipList = repository.findAll();
-    //TODO: How to find and map into DTO????
+    List<Membership> membershipList = repository
+      .findAll()
+      .stream()
+      .map(this::convertToMembershipDTO)
+      .collect(Collectors.toList());
 
-    if (MembershipList.size() > 0) {
-      return MembershipList;
-    } else {
-      return new ArrayList<Membership>();
-    }
+    return membershipList;
+  }
+
+  private MembershipDTO convertToMembershipDTO(Membership membership) {
+    MembershipDTO membershipDTO = new MembershipDTO();
+    membershipDTO.setId(membership.getId());
+    membershipDTO.setName(membership.getName());
+    membershipDTO.setCount(membership.getSubscription().length());
+
+    return membershipDTO;
   }
 
   @CachePut
   public int create(Membership entity) throws Exception {
-    try{
+    try {
       entity = repository.save(entity);
       return entity.getId();
-    }catch(Exception e){
+    } catch (Exception e) {
       throw e;
     }
   }
