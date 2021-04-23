@@ -39,7 +39,7 @@ public class DanceClass {
   private String courseName;
 
   @NotNull
-  private int courseID;
+  private Long courseID;
 
   @ManyToOne
   @JoinColumn(name = "courseID")

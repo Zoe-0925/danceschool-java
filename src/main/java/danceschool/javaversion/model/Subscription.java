@@ -8,7 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -29,10 +28,10 @@ public class Subscription {
   private boolean canceled;
 
   @NotNull
-  private int studentID;
+  private Long studentID;
 
   @NotNull
-  private int membershipID;
+  private Long membershipID;
 
   @NotNull
   private String membershipName;

@@ -32,7 +32,7 @@ public class Course {
   public Instructor instructor;
 
   @NotNull
-  public int instructorID;
+  public Long instructorID;
 
   @NotNull
   public int bookingLimit;

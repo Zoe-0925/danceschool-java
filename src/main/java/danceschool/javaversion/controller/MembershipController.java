@@ -4,7 +4,6 @@ import danceschool.javaversion.model.Membership;
 import danceschool.javaversion.service.MembershipService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +24,7 @@ public class MembershipController {
   MembershipService service;
 
   @GetMapping
-  public List<Membership> findAll() {
+  public ResponseEntity findAll() {
     List<Membership> list = service.getAll();
 
     if (list == null) {
@@ -36,21 +35,34 @@ public class MembershipController {
   }
 
   @PostMapping
-  public Membership saveMembership(@RequestBody Membership entity) {
-    Long id = service.create(entity);
-    return ResponseEntity.ok(id);
+  public ResponseEntity saveMembership(@RequestBody Membership entity)
+    throws Exception {
+    try {
+      Long id = service.create(entity);
+      return ResponseEntity.ok(id);
+    } catch (Exception e) {
+      return ResponseEntity.notFound().build(); //TODO update the error
+    }
   }
 
   @PutMapping
   public ResponseEntity updateMembership(@RequestBody Membership entity) {
-    Membership updated = service.update(entity);
-    if (updated == null) {
+    try {
+      service.update(entity);
+      return (ResponseEntity) ResponseEntity.ok();
+    } catch (Exception e) {
       return ResponseEntity.notFound().build();
-    } else {
-      return ResponseEntity.ok(updated);
     }
   }
 
+  //TODO
   @DeleteMapping("/{id}")
-  public ResponseEntity deleteMembership(@PathVariable("id") Long id) {}
+  public ResponseEntity deleteMembership(@PathVariable("id") Long id) {
+    try {
+      service.deleteMembership(id);
+      return (ResponseEntity) ResponseEntity.ok();
+    } catch (Exception e) {
+      return ResponseEntity.notFound().build(); //TODO update the error
+    }
+  }
 }
