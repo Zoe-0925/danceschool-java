@@ -16,10 +16,7 @@ import lombok.NoArgsConstructor;
 
 @Table(name = "Booking")
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@RedisHash("_bookings_")
+
 public class Booking {
 
   @Id

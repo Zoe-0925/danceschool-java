@@ -1,6 +1,6 @@
 package danceschool.javaversion.dto;
 
-
+import danceschool.javaversion.model.Instructor;
 import java.util.ArrayList;
 import lombok.Data;
 

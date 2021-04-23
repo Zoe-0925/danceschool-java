@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,8 +46,8 @@ public class CourseController {
 
   @GetMapping("page/{pageNumber}/size/{pageSize}/")
   public ResponseEntity findAllBookings(
-    @PathVariable(defaultValue = "1") int pageNumber,
-    @PathVariable(defaultValue = "8") int pageSize
+    @PathVariable int pageNumber,
+    @PathVariable int pageSize
   ) {
     String[] sort = { "name,asc" };
     PaginationFilter filter = new PaginationFilter(pageNumber, pageSize);

@@ -1,7 +1,5 @@
 package danceschool.javaversion;
 
-import com.howtodoinjava.demo.entity.EmployeeEntity;
-import com.howtodoinjava.demo.repository.EmployeeRepository;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,12 +41,18 @@ public class JavaversionApplication implements CommandLineRunner {
   }*/
 
   @Override
-  
   public void run(String... args) throws Exception {
     logger.info("Server started successfully.");
   }
 
   public static void main(String[] args) {
     SpringApplication.run(SpringBootRedisCacheApplication.class, args);
+
+    FirebaseOptions options = FirebaseOptions
+      .builder()
+      .setCredentials(GoogleCredentials.getApplicationDefault())
+      .build();
+
+    FirebaseApp.initializeApp(options);
   }
 }

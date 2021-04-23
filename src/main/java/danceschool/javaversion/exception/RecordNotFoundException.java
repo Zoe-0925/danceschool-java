@@ -1,3 +1,5 @@
+package danceschool.javaversion.exception;
+
 import java.lang.RuntimeException;
 
 public class RecordNotFoundException extends RuntimeException {

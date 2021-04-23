@@ -10,9 +10,9 @@ import lombok.Setter;
 public class BaseResponse {
 
   private ApiError Error;
-  private bool Success;
+  private boolean Success;
   private T Data;
-  private bool IsCached;
+  private boolean IsCached;
 
   public BaseResponse(ApiError error) {
     this.Data = null;

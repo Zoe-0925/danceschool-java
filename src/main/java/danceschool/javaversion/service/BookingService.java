@@ -11,11 +11,15 @@ import danceschool.javaversion.repository.StudentRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -54,7 +58,7 @@ public class BookingService {
     BookingDTO bookingDTO = new BookingDTO();
     bookingDTO.setId(booking.getId());
     bookingDTO.setBookingDate(booking.getBookingDate());
-    bookingDTO.setDate(booking.getDate());
+    bookingDTO.setDate(booking.getDanceClass().getStartTime());
     bookingDTO.setClassID(booking.getClassID());
     bookingDTO.setStudentEmail(booking.getStudent().getEmail());
     bookingDTO.setCourseName(booking.getDanceClass().getCourseName());
@@ -84,9 +88,7 @@ public class BookingService {
 
   //TODO
   @Cacheable
-  public int findBookingCountByMonth() {
-    
-  }
+  public int findBookingCountByMonth() {}
 
   //TODO
   @Cacheable
@@ -108,9 +110,9 @@ public class BookingService {
 
   @CacheEvict(allEntries = true)
   public void delete(int id) throws RecordNotFoundException {
-    Optional<Booking> Booking = repository.findById(id);
+    Booking entity = repository.findById(id);
 
-    if (Booking.isPresent()) {
+    if (booking != null) {
       repository.deleteById(id);
       Student student = studentRepository.findById(entity.getStudentID);
       student.getBookings.remove(entity);

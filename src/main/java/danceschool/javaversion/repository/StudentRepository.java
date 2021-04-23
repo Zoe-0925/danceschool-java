@@ -8,13 +8,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface StudentRepository
   extends PagingAndSortingRepository<Student, Long> {
   @Query("select u from Student u where u.userName like :name")
-  Page<Post> findByName(@Param("name") String name, Pageable pageReq);
+  Page<Student> findByName(@Param("name") String name, Pageable pageReq);
 
-  default Page<Post> findByName(Student Student, Pageable pageReq) {
-    return findByUser(Student.getUserName(), pageReq);
+  default Page<Student> findByName(Student student, Pageable pageReq) {
+    return findByUser(student.getUserName(), pageReq);
   }
 }

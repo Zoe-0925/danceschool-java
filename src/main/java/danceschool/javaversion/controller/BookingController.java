@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.cache.annotation.Cacheable;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -26,10 +27,10 @@ public class BookingController {
   BookingService service;
 
   @GetMapping("page/{pageNumber}/size/{pageSize}/")
-  @Cacheable("bookings")
+  @Cacheable("_bookings_")
   public ResponseEntity findAllBookings(
-    @PathVariable(defaultValue = "1") int pageNumber,
-    @PathVariable(defaultValue = "8") int pageSize
+    @PathVariable int pageNumber,
+    @PathVariable int pageSize
   ) {
     String[] sort = { "bookingDate,desc" };
     PaginationFilter filter = new PaginationFilter(pageNumber, pageSize);

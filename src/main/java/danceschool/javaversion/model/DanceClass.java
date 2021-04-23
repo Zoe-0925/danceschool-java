@@ -3,6 +3,7 @@ package danceschool.javaversion.model;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Set;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,11 +13,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.persistence.CascadeType;
 import lombok.Data;
 
 @Table(name = "DanceClass")
 @Data
-@RedisHash("_classes_")
+
 public class DanceClass {
 
   @Id

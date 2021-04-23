@@ -1,5 +1,6 @@
 package danceschool.javaversion.service;
 
+import danceschool.javaversion.dto.StudentDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.helper.SortDirection;
 import danceschool.javaversion.model.Student;
@@ -7,11 +8,15 @@ import danceschool.javaversion.repository.StudentRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,7 +33,7 @@ public class StudentService {
     // sort=[field, direction]
     classes.add(new Student(SortDirection.getSortDirection(sort[1]), sort[0]));
 
-    Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
+    Pageable pagingSort = PageRequest.of(page, size, Sort.by(userName));
 
     Page<Student> pages = repository
       .findAll(pageReq)

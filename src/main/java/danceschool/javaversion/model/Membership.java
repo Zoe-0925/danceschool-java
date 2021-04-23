@@ -1,6 +1,8 @@
 package danceschool.javaversion.model;
 
 import java.util.ArrayList;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,7 +14,7 @@ import lombok.Data;
 
 @Table(name = "Membership")
 @Data
-@RedisHash("_memberships_")
+
 public class Membership {
 
   @Id

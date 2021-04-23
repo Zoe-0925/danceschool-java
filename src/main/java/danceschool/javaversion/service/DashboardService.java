@@ -1,7 +1,7 @@
 package danceschool.javaversion.service;
 
 import danceschool.javaversion.exception.RecordNotFoundException;
-import danceschool.javaversion.model.Dashboard;
+import danceschool.javaversion.dto.Dashboard;
 import danceschool.javaversion.repository.DashboardRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class DashboardService {
   DashboardRepository repository;
 
   @Cacheable
-  public List<Dashboard> getDashboard() {
+  public Dashboard getDashboard() {
 
     
     //TODO

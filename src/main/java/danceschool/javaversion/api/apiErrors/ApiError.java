@@ -1,4 +1,4 @@
-package danceschool.javaversion.api.apiErrors;
+package danceschool.javaversion.api;
 
 import lombok.Builder;
 import lombok.Getter;

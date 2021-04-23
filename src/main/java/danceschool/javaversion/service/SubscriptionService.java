@@ -1,5 +1,6 @@
 package danceschool.javaversion.service;
 
+import danceschool.javaversion.dto.SubscriptionDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.helper.SortDirection;
 import danceschool.javaversion.model.Membership;
@@ -9,11 +10,15 @@ import danceschool.javaversion.repository.SubscriptionRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,7 +51,8 @@ public class SubscriptionService {
     return pages.getContent();
   }
 
-  private SubscriptionDTO convertToSubscriptionDTO(Subscription subscription) {
+  private SubscriptionDTO convertToSubscriptionDTO(Subscription request) {
+    Subscription subscription = request;
     SubscriptionDTO SubscriptionDTO = new SubscriptionDTO();
     SubscriptionDTO.setId(subscription.getId());
     SubscriptionDTO.setStartDate(subscription.getStartDate());
@@ -74,9 +80,11 @@ public class SubscriptionService {
   }
 
   @CachePut
-  public Boolean update(Subscription entity) {
+  public Boolean update(Subscription entity) throws RecordNotFoundException {
     Optional<Subscription> subscription = repository.findById(entity.getId());
 
+    //TODO
+    //wrong
     if (subscription.isPresent()) {
       Subscription newEntity = subscription.get();
       newEntity.setStartDate(entity.getStartDate());
@@ -95,14 +103,12 @@ public class SubscriptionService {
 
   @CacheEvict(allEntries = true)
   public void unsubscribe(int id) throws RecordNotFoundException {
-    Optional<Subscription> Subscription = repository.findById(id);
+    Subscription entity = repository.findById(id);
 
-    if (Subscription.isPresent()) {
+    if (entity != null) {
       repository.deleteById(id);
-      Membership membership = membershipRepository.findById(
-        entity.getMembershipID
-      );
-      membership.getSubscription.remove(entity);
+      Membership membership = membershipRepository.findById(entity.getMembershipID());
+      membership.getSubscription.remove(membership);
     } else {
       throw new RecordNotFoundException(
         "No Subscription record exist for given id"

@@ -1,5 +1,7 @@
 package danceschool.javaversion.filter;
 
+import lombok.Data;
+
 @Data
 public class PaginationFilter {
 

@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Data
 @Table(name = "Subscription")
-@RedisHash("_subscriptions_")
+
 public class Subscription {
 
   @Id

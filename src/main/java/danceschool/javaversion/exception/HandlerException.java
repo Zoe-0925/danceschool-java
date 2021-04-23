@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class HandlerException {
 
   @ExceptionHandler(Exception.class)
-  ResponseEntity<FailureResponse> exceptionHandler(Exception e) {
+  ResponseEntity<ApiError> exceptionHandler(Exception e) {
     log.error(e.getMessage(), e);
 
     return ResponseEntity
@@ -31,7 +31,7 @@ public class HandlerException {
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  ResponseEntity<FailureResponse> methodArgumentNotValidException(
+  ResponseEntity<ApiError> methodArgumentNotValidException(
     MethodArgumentNotValidException e
   ) {
     log.error(e.getMessage(), e);
