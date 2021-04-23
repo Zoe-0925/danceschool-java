@@ -3,10 +3,10 @@ package danceschool.javaversion.controller;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
+import com.google.firebase.auth.UserRecord.CreateRequest;
 import danceschool.javaversion.dto.SignUpRequest;
 import danceschool.javaversion.dto.SignUpResult;
 import danceschool.javaversion.dto.Token;
-import danceschool.javaversion.dto.UserRecordArgs;
 import danceschool.javaversion.model.Student;
 import danceschool.javaversion.service.AuthService;
 import danceschool.javaversion.service.StudentService;
@@ -18,8 +18,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,12 +36,13 @@ public class AuthController {
   StudentService studentService;
 
   @PostMapping("/sign-up")
-  public ResponseEntity signUp(@RequestBody SignUpRequest request) {
-    UserRecordArgs args = new UserRecordArgs(
-      request.getEmail(),
-      request.getPassword(),
-      request.getUserName()
-    );
+  public ResponseEntity signUp(@RequestBody SignUpRequest request) throws Exception {
+    CreateRequest args = new CreateRequest()
+      .setEmail(request.getEmail())
+      .setPassword(request.getPassword())
+      .setDisplayName(request.getUserName())
+      .setDisabled(false)
+      .setEmailVerified(true);
 
     UserRecord userRecord = FirebaseAuth.getInstance().createUser(args);
     System.out.println("Successfully created new user: " + userRecord.getUid());
@@ -58,14 +57,9 @@ public class AuthController {
   }
 
   @PostMapping("/verify")
-  public ResponseEntity verifyToken(@RequestBody Token idToken) {
-    try {
-      String role = service.getRoleFromToken(idToken.getIdToken());
-      return ResponseEntity.ok(role);
-    } catch (FirebaseAuthException ex) {
-      //TODO exception code
-    } catch (Exception ex) {
-      //TODO exception code
-    }
+  public ResponseEntity verifyToken(@RequestBody Token idToken)
+    throws FirebaseAuthException, Exception {
+    String role = service.getRoleFromToken(idToken.getIdToken());
+    return ResponseEntity.ok(role);
   }
 }
