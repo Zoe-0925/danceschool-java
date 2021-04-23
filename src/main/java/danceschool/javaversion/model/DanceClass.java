@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.HashSet;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,15 +16,18 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.persistence.CascadeType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Table(name = "DanceClass")
 @Data
+
 
 public class DanceClass {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private int id;
+  private Long id;
 
   @NotNull
   private LocalDateTime startTime;
@@ -43,4 +47,6 @@ public class DanceClass {
 
   @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
   Set bookings = new HashSet();
+
+
 }

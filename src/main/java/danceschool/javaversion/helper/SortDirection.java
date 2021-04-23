@@ -2,7 +2,7 @@ package danceschool.javaversion.helper;
 
 import org.springframework.data.domain.Sort;
 
-class SortDirection {
+public class SortDirection {
 
   public static Sort.Direction getSortDirection(String direction) {
     if (direction.equals("asc")) {

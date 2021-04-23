@@ -16,12 +16,11 @@ import lombok.NoArgsConstructor;
 
 @Table(name = "Booking")
 @Data
-
 public class Booking {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private int id;
+  private Long id;
 
   @NotNull
   private LocalDateTime bookingDate;

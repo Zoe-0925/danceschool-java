@@ -23,7 +23,7 @@ public class MembershipService {
   MembershipRepository repository;
 
   @Cacheable
-  public List<Membership> findAllMemberships() {
+  public List<Membership> getAll() {
     List<Membership> membershipList = repository
       .findAll()
       .stream()
@@ -43,7 +43,7 @@ public class MembershipService {
   }
 
   @CachePut
-  public int create(Membership entity) throws Exception {
+  public Long create(Membership entity) throws Exception {
     try {
       entity = repository.save(entity);
       return entity.getId();
@@ -65,22 +65,22 @@ public class MembershipService {
 
       newEntity = repository.save(newEntity);
     } else {
-      throw new RecordNotFoundException(
+    /**   throw new RecordNotFoundException(
         "No Membership record exist for given id"
-      );
+      );*/
     }
   }
 
   @CacheEvict(allEntries = true)
-  public void deleteMembership(int id) throws RecordNotFoundException {
+  public void deleteMembership(Long id) throws RecordNotFoundException {
     Optional<Membership> Membership = repository.findById(id);
 
     if (Membership.isPresent()) {
       repository.deleteById(id);
     } else {
-      throw new RecordNotFoundException(
+     /** throw new RecordNotFoundException(
         "No Membership record exist for given id"
-      );
+      );*/
     }
   }
 }

@@ -1,6 +1,7 @@
 package danceschool.javaversion.service;
 
 import danceschool.javaversion.dto.CourseDTO;
+import danceschool.javaversion.dto.CourseWithCountDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.helper.SortDirection;
 import danceschool.javaversion.model.Course;
@@ -27,7 +28,7 @@ public class CourseService {
   CourseRepository repository;
 
   @Cacheable
-  public List<CourseDTO> getAll() {
+  public List<CourseDTO> getAll(int page, int size, String[] sort) {
     List<Course> courses = new ArrayList<Course>();
 
     // sort=[field, direction]
@@ -35,7 +36,7 @@ public class CourseService {
 
     Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
 
-    Page<Course> result = repository
+    List<CourseDTO> result = repository
       .findAll(pageReq)
       .getContent()
       .stream()
@@ -46,15 +47,7 @@ public class CourseService {
   }
 
   private CourseDTO convertToCourseDTO(Course course) {
-    CourseDTO courseDTO = new CourseDTO();
-    courseDTO.setId(course.getId());
-    courseDTO.setName(course.getName());
-    courseDTO.setPrice(course.getPrice());
-    courseDTO.setBookingLimit(course.getBookingLimit());
-    courseDTO.setClassCount(course.getDanceClasses().length());
-    courseDTO.setInstructorID(course.getInstructorID());
-
-    return courseDTO;
+    return new CourseDTO(course);
   }
 
   //TODO
@@ -73,7 +66,7 @@ public class CourseService {
   }
 
   @CachePut
-  public int create(Course entity) throws Exception {
+  public Long create(Course entity) throws Exception {
     try {
       entity = repository.save(entity);
       return entity.getId();
@@ -83,18 +76,17 @@ public class CourseService {
   }
 
   @CachePut
-  public Course Update(Course entity) throws RecordNotFoundException {
-    Optional<Course> Course = repository.findById(entity.getId());
+  public Course Update(Course course) throws RecordNotFoundException {
+    Optional<Course> entity = repository.findById(course.getId());
 
-    if (Course.isPresent()) {
-      Course newEntity = Course.get();
+    if (entity.isPresent()) {
+      Course newEntity = entity.get();
       newEntity.setName(entity.getName());
       newEntity.setPrice(entity.getPrice());
       newEntity.setInstructorID(entity.getInstructorID());
       newEntity.setBookingLimit(entity.getBookingLimit());
 
       newEntity = repository.save(newEntity);
-
       return newEntity;
     } else {
       return null;
@@ -102,13 +94,13 @@ public class CourseService {
   }
 
   @CacheEvict(allEntries = true)
-  public void delete(int id) throws RecordNotFoundException {
+  public void delete(Long id) throws RecordNotFoundException {
     Optional<Course> Course = repository.findById(id);
 
     if (Course.isPresent()) {
       repository.deleteById(id);
     } else {
-      throw new RecordNotFoundException("No Course record exist for given id");
+     // throw new RecordNotFoundException("No Course record exist for given id");
     }
   }
 }

@@ -37,7 +37,7 @@ public class MembershipController {
 
   @PostMapping
   public Membership saveMembership(@RequestBody Membership entity) {
-    int id = service.create(entity);
+    Long id = service.create(entity);
     return ResponseEntity.ok(id);
   }
 
@@ -52,5 +52,5 @@ public class MembershipController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity deleteMembership(@PathVariable("id") int id) {}
+  public ResponseEntity deleteMembership(@PathVariable("id") Long id) {}
 }

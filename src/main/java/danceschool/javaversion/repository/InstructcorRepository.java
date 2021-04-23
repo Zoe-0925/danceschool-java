@@ -12,12 +12,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Repository
-public interface InstructcorRepository
+public interface InstructorRepository
   extends PagingAndSortingRepository<Instructcor, Long> {
   @Query(
     "select u from Instructor u where u.firstName LIKE :name or u.lastName LIKE :name"
   )
-  Page<Instructcor> findByName(@Param("name") String name, Pageable pageReq);
+  List<Instructcor> findByName(@Param("name") String name, Pageable pageReq);
 
   default Page<Instructcor> findByName(
     Instructcor Instructor,

@@ -2,6 +2,7 @@ package danceschool.javaversion.model;
 
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.HashSet;
 import javax.persistence.CascadeType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +20,7 @@ public class Membership {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private int id;
+  private Long id;
 
   @NotNull
   @Size(max = 30)

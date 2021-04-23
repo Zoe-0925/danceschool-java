@@ -32,7 +32,7 @@ public class SubscriptionService {
   MembershipRepository membershipRepository;
 
   @Cacheable
-  public List<Subscription> getAll() {
+  public List<Subscription> getAll(int page, int size, String[] sort) {
     List<Subscription> classes = new ArrayList<Subscription>();
 
     // sort=[field, direction]
@@ -40,9 +40,11 @@ public class SubscriptionService {
       new Subscription(SortDirection.getSortDirection(sort[1]), sort[0])
     );
 
+    //TODO bug
+    //TODO specify page sort
     Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
 
-    Page<Subscription> pages = repository
+    List<SubscriptionDTO> pages = repository
       .findAll(pageReq)
       .stream()
       .map(this::convertToSubscriptionDTO)
@@ -51,27 +53,19 @@ public class SubscriptionService {
     return pages.getContent();
   }
 
-  private SubscriptionDTO convertToSubscriptionDTO(Subscription request) {
-    Subscription subscription = request;
-    SubscriptionDTO SubscriptionDTO = new SubscriptionDTO();
-    SubscriptionDTO.setId(subscription.getId());
-    SubscriptionDTO.setStartDate(subscription.getStartDate());
-    SubscriptionDTO.setCanceled(subscription.getCanceled());
-    SubscriptionDTO.setStudentName(subscription.getStudent().getUserName());
-    SubscriptionDTO.setMembershipName(subscription.getMembership().getName());
-
-    return SubscriptionDTO;
+  private SubscriptionDTO convertToSubscriptionDTO(Subscription subscription) {
+    return new SubscriptionDTO(subscription);
   }
 
   @CachePut
-  public int create(Subscription entity) throws Exception {
+  public Long create(Subscription entity) throws Exception {
     try {
       entity = repository.save(entity);
 
       Membership membership = membershipRepository.findById(
-        entity.getMembershipID
+        entity.getMembershipID()
       );
-      membership.getSubscription.add(entity);
+      membership.getSubscription().add(entity);
 
       return entity.getId();
     } catch (Exception e) {
@@ -97,22 +91,26 @@ public class SubscriptionService {
 
       return true;
     } else {
-      throw new RecordNotFoundException("No Student record exist for given id");
+      /**     throw new RecordNotFoundException(
+        "No Subscription record exist for given id", RuntimeException e
+      );*/
     }
   }
 
   @CacheEvict(allEntries = true)
-  public void unsubscribe(int id) throws RecordNotFoundException {
+  public void unsubscribe(Long id) throws RecordNotFoundException {
     Subscription entity = repository.findById(id);
 
     if (entity != null) {
       repository.deleteById(id);
-      Membership membership = membershipRepository.findById(entity.getMembershipID());
-      membership.getSubscription.remove(membership);
-    } else {
-      throw new RecordNotFoundException(
-        "No Subscription record exist for given id"
+      Membership membership = membershipRepository.findById(
+        entity.getMembershipID()
       );
+      membership.getSubscription().remove(membership);
+    } else {
+      /**     throw new RecordNotFoundException(
+        "No Subscription record exist for given id", RuntimeException e
+      );*/
     }
   }
 }

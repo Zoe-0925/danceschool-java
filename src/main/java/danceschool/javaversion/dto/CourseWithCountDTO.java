@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class CourseWithCountDTO {
 
-  public ArrayList<CourseDTO> Data;
-  public int Count;
+  public ArrayList<CourseDTO> data;
+  public int count;
 }

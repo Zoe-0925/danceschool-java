@@ -1,6 +1,5 @@
 package danceschool.javaversion.dto;
 
-
 import lombok.Data;
 
 @Data

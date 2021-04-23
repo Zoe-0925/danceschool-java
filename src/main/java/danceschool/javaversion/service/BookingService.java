@@ -1,9 +1,11 @@
 package danceschool.javaversion.service;
 
 import danceschool.javaversion.dto.BookingDTO;
+import danceschool.javaversion.dto.BookingCountDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.helper.SortDirection;
 import danceschool.javaversion.model.Booking;
+import danceschool.javaversion.model.DanceClass;
 import danceschool.javaversion.model.Student;
 import danceschool.javaversion.repository.BookingRepository;
 import danceschool.javaversion.repository.DanceClassRepository;
@@ -44,7 +46,7 @@ public class BookingService {
 
     Pageable pagingSort = PageRequest.of(page, size, Sort.by(bookings));
 
-    Page<Booking> bookingList = repository
+    List<BookingDTO> bookingList = repository
       .findAll(pageReq)
       .getContent()
       .stream()
@@ -55,15 +57,7 @@ public class BookingService {
   }
 
   private BookingDTO convertToBookingDTO(Booking booking) {
-    BookingDTO bookingDTO = new BookingDTO();
-    bookingDTO.setId(booking.getId());
-    bookingDTO.setBookingDate(booking.getBookingDate());
-    bookingDTO.setDate(booking.getDanceClass().getStartTime());
-    bookingDTO.setClassID(booking.getClassID());
-    bookingDTO.setStudentEmail(booking.getStudent().getEmail());
-    bookingDTO.setCourseName(booking.getDanceClass().getCourseName());
-
-    return bookingDTO;
+    return new BookingDTO(booking);
   }
 
   //TODO
@@ -72,15 +66,15 @@ public class BookingService {
 
   //TODO
   @Cacheable
-  public List<BookingDTO> getByStudent(int id) {}
+  public List<BookingDTO> getByStudent(Long id) {}
 
   @Cacheable
-  public BookingWithCountDTO getWithCount() {
+  public BookingCountDTO getWithCount() {
     List<Booking> BookingList = repository
       .findAll()
       .forEach(_bookings_with_count_::add);
     if (BookingList.size() > 0) {
-      return new BookingWithCountDTO(BookingList, BookingList.length());
+      return new BookingCountDTO(BookingList, BookingList.size());
     } else {
       return null;
     }
@@ -88,19 +82,23 @@ public class BookingService {
 
   //TODO
   @Cacheable
-  public int findBookingCountByMonth() {}
+  public int findBookingCountByMonth() {
+	  return 0;
+  }
 
   //TODO
   @Cacheable
-  public int findBookingCountByYear() {}
+  public int findBookingCountByYear() {
+	  return 0;
+  }
 
   @CachePut
-  public int create(Booking entity) throws Exception {
+  public Long create(Booking entity) throws Exception {
     try {
       entity = repository.save(entity);
-      Student student = studentRepository.findById(entity.getStudentID);
-      student.getBookings.add(entity);
-      DanceClass danceClass = danceClassRepository.findById(entity.getClassID);
+      Student student = studentRepository.findById(entity.getStudentID());
+      student.getBookings().add(entity);
+      DanceClass danceClass = danceClassRepository.findById(entity.getClassID());
       danceClass.getBookings().add(entity);
       return entity.getId();
     } catch (Exception e) {
@@ -109,17 +107,18 @@ public class BookingService {
   }
 
   @CacheEvict(allEntries = true)
-  public void delete(int id) throws RecordNotFoundException {
-    Booking entity = repository.findById(id);
+  public void delete(Long id) throws RecordNotFoundException {
+    Booking booking = repository.findById(id);
 
     if (booking != null) {
       repository.deleteById(id);
-      Student student = studentRepository.findById(entity.getStudentID);
-      student.getBookings.remove(entity);
-      DanceClass danceClass = danceClassRepository.findById(entity.getClassID);
+      Booking entity = booking.get();
+      Student student = studentRepository.findById(entity.getStudentID());
+      student.getBookings().remove(entity);
+      DanceClass danceClass = danceClassRepository.findById(entity.getClassID());
       danceClass.getBookings().remove(entity);
     } else {
-      throw new RecordNotFoundException("No Booking record exist for given id");
+ //     throw new RecordNotFoundException("No Booking record exist for given id");
     }
   }
 }

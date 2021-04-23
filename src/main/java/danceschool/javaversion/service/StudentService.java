@@ -27,7 +27,9 @@ public class StudentService {
   StudentRepository repository;
 
   @Cacheable
-  public List<Student> getAll() {
+  public List<Student> getAll(
+    int page, int size, String[] sort
+  ) {
     List<Student> classes = new ArrayList<Student>();
 
     // sort=[field, direction]
@@ -35,7 +37,7 @@ public class StudentService {
 
     Pageable pagingSort = PageRequest.of(page, size, Sort.by(userName));
 
-    Page<Student> pages = repository
+    List<StudentDTO> pages = repository
       .findAll(pageReq)
       .stream()
       .map(this::convertToStudentDTO)
@@ -45,13 +47,7 @@ public class StudentService {
   }
 
   private StudentDTO convertToStudentDTO(Student student) {
-    StudentDTO studentDTO = new StudentDTO();
-    studentDTO.setId(student.getId());
-    studentDTO.setUserName(student.getUserName());
-    studentDTO.setEmail(student.getEmail());
-    studentDTO.setMembership(student.getMembership());
-
-    return studentDTO;
+    return new StudentDTO(student);
   }
 
   //TODO
@@ -64,10 +60,10 @@ public class StudentService {
 
   //TODO
   @Cacheable
-  public String findEmailByBookingId(int id) {}
+  public String findEmailByBookingId(Long id) {}
 
   @CachePut
-  public int create(Student entity) throws Exception {
+  public Long create(Student entity) throws Exception {
     try {
       entity = repository.save(entity);
       return entity.getId();
@@ -87,18 +83,18 @@ public class StudentService {
 
       newEntity = repository.save(newEntity);
     } else {
-      throw new RecordNotFoundException("No Student record exist for given id");
+     // throw new RecordNotFoundException("No Student record exist for given id");
     }
   }
 
   @CacheEvict(allEntries = true)
-  public void deleteStudent(int id) throws RecordNotFoundException {
+  public void deleteStudent(Long id) throws RecordNotFoundException {
     Optional<Student> Student = repository.findById(id);
 
     if (Student.isPresent()) {
       repository.deleteById(id);
     } else {
-      throw new RecordNotFoundException("No Student record exist for given id");
+     // throw new RecordNotFoundException("No Student record exist for given id");
     }
   }
 }

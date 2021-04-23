@@ -44,7 +44,7 @@ public class InstructorController {
 
   @PostMapping
   public Instructor saveInstructor(@RequestBody Instructor entity) {
-    int id = service.create(entity);
+    Long id = service.create(entity);
     return ResponseEntity.ok(id);
   }
 
@@ -59,7 +59,7 @@ public class InstructorController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity deleteInstructor(@PathVariable("id") int id) {
+  public ResponseEntity deleteInstructor(@PathVariable("id") Long id) {
     service.delete(id);
 
     return ResponseEntity.noContent().build();

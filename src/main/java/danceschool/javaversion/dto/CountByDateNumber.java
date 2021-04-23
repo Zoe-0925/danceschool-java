@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class CountByDateNumber {
 
-  private int Count;
+  private int count;
 
-  private int Date;
+  private int date;
 }

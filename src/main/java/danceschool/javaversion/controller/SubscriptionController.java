@@ -52,7 +52,7 @@ public class SubscriptionController {
 
   @PostMapping
   public Subscription saveSubscription(@RequestBody Subscription entity) {
-    int id = service.create(entity);
+    Long id = service.create(entity);
     return ResponseEntity.ok(id);
   }
 
@@ -67,7 +67,7 @@ public class SubscriptionController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity deleteSubscription(@PathVariable("id") int id) {
+  public ResponseEntity deleteSubscription(@PathVariable("id") Long id) {
     service.delete(id);
 
     return ResponseEntity.noContent().build();

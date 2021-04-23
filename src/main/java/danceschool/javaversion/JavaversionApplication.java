@@ -1,14 +1,15 @@
 package danceschool.javaversion;
 
-import java.util.Optional;
+import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.FirebaseApp;
+import com.google.auth.oauth2.GoogleCredentials;
 
 @SpringBootApplication
 @EnableCaching //enables Spring Caching functionality
@@ -45,8 +46,8 @@ public class JavaversionApplication implements CommandLineRunner {
     logger.info("Server started successfully.");
   }
 
-  public static void main(String[] args) {
-    SpringApplication.run(SpringBootRedisCacheApplication.class, args);
+  public static void main(String[] args) throws IOException {
+    SpringApplication.run(JavaversionApplication.class, args);
 
     FirebaseOptions options = FirebaseOptions
       .builder()

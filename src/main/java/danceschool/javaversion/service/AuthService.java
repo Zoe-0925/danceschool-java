@@ -8,18 +8,16 @@ public class AuthService {
 
   public String getRoleFromToken(String token) {
     try {
-      FirebaseToken decodedToken = firebaseAuth.verifyIdToken(token);
-    } catch (FirebaseAuthException e) {
-      log.error("Firebase Exception:: ", e.getLocalizedMessage());
-    }
+      FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
+      if (Boolean.TRUE.equals(decodedToken.getClaims().get("admin"))) {
+          return "admin";
+        }
 
-    if (Boolean.TRUE.equals(decoded.getClaims().get("admin"))) {
-      return "admin";
-    }
-
-    if (Boolean.TRUE.equals(decoded.getClaims().get("student"))) {
-      return "student";
-    }
-    return "";
-  }
-}
+        if (Boolean.TRUE.equals(decodedToken.getClaims().get("student"))) {
+          return "student";
+        }
+        return "";}
+     catch (FirebaseAuthException e) {
+    	    return "";
+    }}}
+  

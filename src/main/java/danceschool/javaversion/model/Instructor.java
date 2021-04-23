@@ -13,7 +13,7 @@ public class Instructor {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private int id;
+  private Long id;
 
   @NotNull
   @Size(max = 30)

@@ -14,7 +14,7 @@ public class HandlerException {
 
   @ExceptionHandler(Exception.class)
   ResponseEntity<ApiError> exceptionHandler(Exception e) {
-    log.error(e.getMessage(), e);
+
 
     return ResponseEntity
       .badRequest()
@@ -34,7 +34,7 @@ public class HandlerException {
   ResponseEntity<ApiError> methodArgumentNotValidException(
     MethodArgumentNotValidException e
   ) {
-    log.error(e.getMessage(), e);
+
 
     return ResponseEntity
       .badRequest()

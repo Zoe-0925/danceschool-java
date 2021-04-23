@@ -20,7 +20,7 @@ public class InstructorService {
   @Autowired
   InstructorRepository repository;
 
-  public List<Instructor> findAllInstructors() {
+  public List<Instructor> getAll() {
     List<Instructor> instructorList = repository.findAll();
     if (instructorList.size() > 0) {
       return InstructorList;
@@ -32,7 +32,7 @@ public class InstructorService {
   //TODO
   public List<Instructor> findByName(String name) {}
 
-  public int create(Instructor entity) throws Exception {
+  public Long create(Instructor entity) throws Exception {
     try {
       entity = repository.save(entity);
       return entity.getId();
@@ -54,22 +54,22 @@ public class InstructorService {
 
       return newEntity;
     } else {
-      throw new RecordNotFoundException(
+      /**  throw new RecordNotFoundException(
         "No Instructor record exist for given id"
-      );
+      );*/
     }
   }
 
   @CacheEvict(allEntries = true)
-  public void deleteInstructor(int id) throws RecordNotFoundException {
+  public void deleteInstructor(Long id) throws RecordNotFoundException {
     Optional<Instructor> Instructor = repository.findById(id);
 
     if (Instructor.isPresent()) {
       repository.deleteById(id);
     } else {
-      throw new RecordNotFoundException(
+      /**   throw new RecordNotFoundException(
         "No Instructor record exist for given id"
-      );
+      );*/
     }
   }
 }

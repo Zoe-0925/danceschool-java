@@ -54,8 +54,8 @@ public class DanceClassController {
   }
 
   @PostMapping
-  public DanceClass saveDanceClass(@RequestBody DanceClas entity) {
-    int id = service.create(entity);
+  public DanceClass saveDanceClass(@RequestBody DanceClass entity) {
+    Long id = service.create(entity);
     return ResponseEntity.ok(id);
   }
 
@@ -70,7 +70,7 @@ public class DanceClassController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity deleteDanceClass(@PathVariable("id") int id) {
+  public ResponseEntity deleteDanceClass(@PathVariable("id") Long id) {
     service.delete(id);
 
     return ResponseEntity.noContent().build();

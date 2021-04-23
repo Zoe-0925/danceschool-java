@@ -1,10 +1,10 @@
 package danceschool.javaversion.repository;
 
 import danceschool.javaversion.model.Student;
-import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +17,8 @@ public interface StudentRepository
   Page<Student> findByName(@Param("name") String name, Pageable pageReq);
 
   default Page<Student> findByName(Student student, Pageable pageReq) {
-    return findByUser(student.getUserName(), pageReq);
+    return findByName(student.getUserName(), pageReq);
   }
+
+  Optional<Student> findById(@Param("id") Long id);
 }

@@ -1,8 +1,9 @@
 package danceschool.javaversion.controller;
 
+import danceschool.javaversion.dto.CourseDTO;
 import danceschool.javaversion.filter.PaginationFilter;
 import danceschool.javaversion.model.*;
-import danceschool.javaversion.serivce.CourseService;
+import danceschool.javaversion.service.CourseService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,12 @@ public class CourseController {
   CourseService service;
 
   @GetMapping("page/{pageNumber}/size/{pageSize}/")
-  public List<Course> findAllCourses(
+  public ResponseEntity findAllCourses(
     @PathVariable("pageNumber") int pageNumber,
     @PathVariable("pageSize") int pageSize
   ) {
     PaginationFilter filter = new PaginationFilter(pageNumber, pageSize);
-    List<Course> list = service.getAll(
+    List<CourseDTO> list = service.getAll(
       filter.getPageNumber(),
       filter.getPageSize()
     );
@@ -52,7 +53,7 @@ public class CourseController {
     String[] sort = { "name,asc" };
     PaginationFilter filter = new PaginationFilter(pageNumber, pageSize);
 
-    List<Course> list = service.getAll(
+    List<CourseDTO> list = service.getAll(
       filter.getPageNumber(),
       filter.getPageSize(),
       sort
@@ -69,7 +70,7 @@ public class CourseController {
   public ResponseEntity<Course> findCourseById(
     @PathVariable(value = "id") long id
   ) {
-    Optional<Course> course = courseRepository.findById(id);
+    Optional<Course> course = service.findById(id);
 
     if (course.isPresent()) {
       return ResponseEntity.ok().body(course.get());
@@ -80,7 +81,7 @@ public class CourseController {
 
   @PostMapping
   public Course saveCourse(@RequestBody Course entity) {
-    int id = service.create(entity);
+    Long id = service.create(entity);
     return ResponseEntity.ok(id);
   }
 
@@ -95,7 +96,7 @@ public class CourseController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity deleteCourse(@PathVariable("id") int id) {
+  public ResponseEntity deleteCourse(@PathVariable("id") Long id) {
     service.delete(id);
 
     return ResponseEntity.noContent().build();
