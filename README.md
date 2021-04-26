@@ -23,12 +23,6 @@ The users roles include the dance school owner (admin) and students. <br />
 <a name="API"></a>
 ## API Documentation (Swagger)
 
-<a name="Demo"></a> 
-## Admin Demo: https://danceschoool.herokuapp.com/admin   (No sign up required)
-## Student Demo: https://danceschoool.herokuapp.com/student      (No sign up required)
-![Demo Photo](https://github.com/Zoe-0925/DanceSchool/blob/master/danceschool/Client/public/Demo.png)
-![Demo Photo](https://github.com/Zoe-0925/DanceSchool/blob/master/danceschool/Client/public/Demo-2.png)
-
 <a name="Feature"></a>
 ## Feature Highlights
 - An interactive admin dashboard with visualisations for data analytics
