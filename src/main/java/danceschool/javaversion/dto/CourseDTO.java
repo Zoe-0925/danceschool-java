@@ -13,7 +13,7 @@ public class CourseDTO { //: IMapFrom<Course>
   public double price;
   public int bookingLimit;
   public int classCount;
-  public int instructorID;
+  public Long instructorID;
 
   public CourseDTO(Course course) {
     this.id = course.getId();

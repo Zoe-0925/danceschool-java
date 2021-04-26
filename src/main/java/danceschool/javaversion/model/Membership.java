@@ -1,8 +1,8 @@
 package danceschool.javaversion.model;
 
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +15,6 @@ import lombok.Data;
 
 @Table(name = "Membership")
 @Data
-
 public class Membership {
 
   @Id
@@ -35,4 +34,6 @@ public class Membership {
 
   @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL)
   Set subscription = new HashSet();
+
+  public void setCanceled(Object canceled) {}
 }

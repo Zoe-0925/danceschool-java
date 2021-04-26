@@ -1,7 +1,7 @@
 package danceschool.javaversion.service;
 
-import danceschool.javaversion.dto.BookingDTO;
 import danceschool.javaversion.dto.BookingCountDTO;
+import danceschool.javaversion.dto.BookingDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.helper.SortDirection;
 import danceschool.javaversion.model.Booking;
@@ -14,11 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -38,16 +40,15 @@ public class BookingService {
   DanceClassRepository danceClassRepository;
 
   @Cacheable // caches the result of findAll() method
-  public List<BookingDTO> getAll(int page, int size, String[] sort) {
-    List<Booking> bookings = new ArrayList<Booking>();
-
-    // sort=[field, direction]
-    bookings.add(new Booking(SortDirection.getSortDirection(sort[1]), sort[0]));
-
-    Pageable pagingSort = PageRequest.of(page, size, Sort.by(bookings));
+  public List<BookingDTO> getAll(int page, int pageSize) {
+    Pageable paging = PageRequest.of(
+      page,
+      pageSize,
+      Sort.by("bookingDate").descending()
+    );
 
     List<BookingDTO> bookingList = repository
-      .findAll(pageReq)
+      .findAll(paging)
       .getContent()
       .stream()
       .map(this::convertToBookingDTO)
@@ -62,44 +63,60 @@ public class BookingService {
 
   //TODO
   @Cacheable
-  public List<BookingDTO> getByCourse(String name) {}
+  public List<BookingDTO> getByCourse(Long id) {
+    return repository
+      .getByCourse(id)
+      .stream()
+      .map(this::convertToBookingDTO)
+      .collect(Collectors.toList());
+  }
 
   //TODO
   @Cacheable
-  public List<BookingDTO> getByStudent(Long id) {}
+  public List<BookingDTO> getByStudent(Long id) {
+    return repository
+    .getByStudent(id)
+    .stream()
+    .map(this::convertToBookingDTO)
+    .collect(Collectors.toList());
+  }
 
   @Cacheable
   public BookingCountDTO getWithCount() {
-    List<Booking> BookingList = repository
-      .findAll()
-      .forEach(_bookings_with_count_::add);
-    if (BookingList.size() > 0) {
-      return new BookingCountDTO(BookingList, BookingList.size());
-    } else {
-      return null;
-    }
+    Iterable<Booking> bookings = repository.findAll();
+
+    List<BookingDTO> bookingList = StreamSupport
+      .stream(bookings.spliterator(), false)
+      .map(this::convertToBookingDTO)
+      .collect(Collectors.toList());
+
+    return new BookingCountDTO(bookingList, bookingList.size());
   }
 
   //TODO
   @Cacheable
   public int findBookingCountByMonth() {
-	  return 0;
+    return 0;
   }
 
   //TODO
   @Cacheable
   public int findBookingCountByYear() {
-	  return 0;
+    return 0;
   }
 
   @CachePut
   public Long create(Booking entity) throws Exception {
     try {
       entity = repository.save(entity);
-      Student student = studentRepository.findById(entity.getStudentID());
-      student.getBookings().add(entity);
-      DanceClass danceClass = danceClassRepository.findById(entity.getClassID());
-      danceClass.getBookings().add(entity);
+      Optional<Student> student = studentRepository.findById(
+        entity.getStudentID()
+      );
+      student.get().getBookings().add(entity);
+      Optional<DanceClass> danceClass = danceClassRepository.findById(
+        entity.getClassID()
+      );
+      danceClass.get().getBookings().add(entity);
       return entity.getId();
     } catch (Exception e) {
       throw e;
@@ -108,17 +125,21 @@ public class BookingService {
 
   @CacheEvict(allEntries = true)
   public void delete(Long id) throws RecordNotFoundException {
-    Booking booking = repository.findById(id);
+    Optional<Booking> booking = repository.findById(id);
 
     if (booking != null) {
       repository.deleteById(id);
       Booking entity = booking.get();
-      Student student = studentRepository.findById(entity.getStudentID());
-      student.getBookings().remove(entity);
-      DanceClass danceClass = danceClassRepository.findById(entity.getClassID());
-      danceClass.getBookings().remove(entity);
+      Optional<Student> student = studentRepository.findById(
+        entity.getStudentID()
+      );
+      student.get().getBookings().remove(entity);
+      Optional<DanceClass> danceClass = danceClassRepository.findById(
+        entity.getClassID()
+      );
+      danceClass.get().getBookings().remove(entity);
     } else {
- //     throw new RecordNotFoundException("No Booking record exist for given id");
+      //     throw new RecordNotFoundException("No Booking record exist for given id");
     }
   }
 }

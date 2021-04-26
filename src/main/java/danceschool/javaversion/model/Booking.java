@@ -26,15 +26,15 @@ public class Booking {
   private LocalDateTime bookingDate;
 
   @NotNull
-  private int studentID;
+  private Long studentID;
 
   @NotNull
-  private int instructorID;
+  private Long instructorID;
 
-  private int membershipID;
+  private Long membershipID;
 
   @NotNull
-  private int classID;
+  private Long classID;
 
   @ManyToOne
   @JoinColumn(name = "classID")

@@ -11,7 +11,7 @@ public class BookingDTO {
   private LocalDateTime bookingDate;
   private LocalDateTime date;
 
-  private int classID;
+  private Long classID;
   private String studentEmail;
   private String courseName;
 

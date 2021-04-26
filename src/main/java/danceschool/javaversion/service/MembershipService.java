@@ -37,7 +37,7 @@ public class MembershipService {
     MembershipDTO membershipDTO = new MembershipDTO();
     membershipDTO.setId(membership.getId());
     membershipDTO.setName(membership.getName());
-    membershipDTO.setCount(membership.getSubscription().length());
+    membershipDTO.setCount(membership.getSubscription().size());
 
     return membershipDTO;
   }
@@ -57,10 +57,9 @@ public class MembershipService {
     Optional<Membership> membership = repository.findById(entity.getId());
 
     if (membership.isPresent()) {
-      Membership newEntity = Membership.get();
+      Membership newEntity = membership.get();
       newEntity.setName(entity.getName());
       newEntity.setDuration(entity.getDuration());
-      newEntity.setCanceled(entity.getCanceled());
       newEntity.setPrice(entity.getPrice());
 
       newEntity = repository.save(newEntity);

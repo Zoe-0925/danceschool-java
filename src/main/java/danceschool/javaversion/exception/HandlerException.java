@@ -1,6 +1,6 @@
 package danceschool.javaversion.exception;
 
-import danceschool.javaversion.api.apiErrors.ApiError;
+import danceschool.javaversion.api.ApiError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +14,6 @@ public class HandlerException {
 
   @ExceptionHandler(Exception.class)
   ResponseEntity<ApiError> exceptionHandler(Exception e) {
-
-
     return ResponseEntity
       .badRequest()
       .body(
@@ -34,8 +32,6 @@ public class HandlerException {
   ResponseEntity<ApiError> methodArgumentNotValidException(
     MethodArgumentNotValidException e
   ) {
-
-
     return ResponseEntity
       .badRequest()
       .body(

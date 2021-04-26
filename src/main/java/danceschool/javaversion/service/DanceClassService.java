@@ -16,9 +16,9 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -33,24 +33,21 @@ public class DanceClassService {
   CourseRepository courseRepository;
 
   @Cacheable
-  public List<DanceClassDTO> getAll(int page, int size, String[] sort) {
-    List<DanceClass> classes = new ArrayList<DanceClass>();
-
-    // sort=[field, direction]
-    classes.add(
-      new DanceClass(SortDirection.getSortDirection(sort[1]), sort[0])
+  public List<DanceClassDTO> getAll(int page, int pageSize) {
+    Pageable paging = PageRequest.of(
+      page,
+      pageSize,
+      Sort.by("startDate").descending()
     );
 
-    Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
-
-    List<DanceClassDTO> result = repository
-      .findAll(pageReq)
+    List<DanceClassDTO> classList = repository
+      .findAll(paging)
       .getContent()
       .stream()
       .map(this::convertToDanceClassDTO)
       .collect(Collectors.toList());
 
-    return result;
+    return classList;
   }
 
   private DanceClassDTO convertToDanceClassDTO(DanceClass danceClass) {
@@ -59,19 +56,23 @@ public class DanceClassService {
 
   //TODO
   @Cacheable
-  public List<DanceClass> findByCourse(Long id) {}
+  public List<DanceClass> findByCourse(Long id) {
+    return repository.findByCourse(id);
+  }
 
   @CachePut
   public Long create(DanceClass entity) throws Exception {
     try {
       entity = repository.save(entity);
-      Course course = courseRepository.findById(entity.getCourseID());
-      course.getDanceClassess().add(entity);
-
-      return entity.getId();
+      Optional<Course> course = courseRepository.findById(entity.getCourseID());
+      if (course.isPresent()) {
+        course.get().getDanceClasses().add(entity);
+        return entity.getId();
+      }
     } catch (Exception e) {
       throw e;
     }
+    return null;
   }
 
   @CachePut
@@ -98,12 +99,12 @@ public class DanceClassService {
     if (danceClass.isPresent()) {
       DanceClass entity = danceClass.get();
       repository.deleteById(id);
-     // Course course = courseRepository.findById(entity.getCourseID);
-    //  course.getDanceClassess.remove(entity);
+      // Course course = courseRepository.findById(entity.getCourseID);
+      //  course.getDanceClassess.remove(entity);
     } else {
-   /**  throw new RecordNotFoundException(
+      /**  throw new RecordNotFoundException(
         "No DanceClass record exist for given id"
-      ); */ 
+      ); */
     }
   }
 }

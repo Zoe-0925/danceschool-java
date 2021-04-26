@@ -33,9 +33,12 @@ public class CourseController {
     @PathVariable("pageSize") int pageSize
   ) {
     PaginationFilter filter = new PaginationFilter(pageNumber, pageSize);
+
+    //TODO add sort by what
     List<CourseDTO> list = service.getAll(
       filter.getPageNumber(),
-      filter.getPageSize()
+      filter.getPageSize(),
+      null
     );
 
     if (list == null) {
@@ -66,32 +69,31 @@ public class CourseController {
     }
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<Course> findCourseById(
-    @PathVariable(value = "id") long id
+  @GetMapping("/search/{name}")
+  public ResponseEntity<List<Course>> findCourseByName(
+    @PathVariable(value = "id") String name
   ) {
-    Optional<Course> course = service.findById(id);
-
-    if (course.isPresent()) {
-      return ResponseEntity.ok().body(course.get());
-    } else {
-      return ResponseEntity.notFound().build();
-    }
+    List<Course> courses = service.findByName(name);
+    return ResponseEntity.ok(courses);
   }
 
   @PostMapping
-  public Course saveCourse(@RequestBody Course entity) {
-    Long id = service.create(entity);
-    return ResponseEntity.ok(id);
+  public ResponseEntity<Long> saveCourse(@RequestBody Course entity) {
+    try {
+      Long id = service.create(entity);
+      return ResponseEntity.ok(id);
+    } catch (Exception e) {
+      return null;
+    }
   }
 
   @PutMapping
   public ResponseEntity updateCourse(@RequestBody Course entity) {
-    Course updated = service.update(entity);
-    if (updated == null) {
+    try {
+      service.update(entity);
+      return (ResponseEntity) ResponseEntity.ok();
+    } catch (Exception e) {
       return ResponseEntity.notFound().build();
-    } else {
-      return ResponseEntity.ok(updated);
     }
   }
 

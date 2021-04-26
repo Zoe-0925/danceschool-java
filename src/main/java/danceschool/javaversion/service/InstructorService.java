@@ -23,14 +23,15 @@ public class InstructorService {
   public List<Instructor> getAll() {
     List<Instructor> instructorList = repository.findAll();
     if (instructorList.size() > 0) {
-      return InstructorList;
+      return instructorList;
     } else {
       return new ArrayList<Instructor>();
     }
   }
 
   //TODO
-  public List<Instructor> findByName(String name) {}
+  public List<Instructor> findByName(String name) {
+    return null;}
 
   public Long create(Instructor entity) throws Exception {
     try {
@@ -41,7 +42,7 @@ public class InstructorService {
     }
   }
 
-  public Instructor Update(Instructor entity) throws RecordNotFoundException {
+  public Instructor update(Instructor entity) throws RecordNotFoundException {
     Optional<Instructor> Instructor = repository.findById(entity.getId());
 
     if (Instructor.isPresent()) {
@@ -58,6 +59,7 @@ public class InstructorService {
         "No Instructor record exist for given id"
       );*/
     }
+    return entity;
   }
 
   @CacheEvict(allEntries = true)
@@ -72,4 +74,7 @@ public class InstructorService {
       );*/
     }
   }
+
+public void delete(Long id) {
+}
 }

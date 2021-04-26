@@ -12,7 +12,6 @@ import lombok.Data;
 
 @Data
 @Table(name = "Subscription")
-
 public class Subscription {
 
   @Id
@@ -43,4 +42,8 @@ public class Subscription {
   @ManyToOne
   @JoinColumn(name = "membershipID")
   private Membership membership;
+
+  public boolean getCanceled() {
+    return canceled;
+  }
 }

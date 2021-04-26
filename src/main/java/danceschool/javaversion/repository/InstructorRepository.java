@@ -21,4 +21,6 @@ public interface InstructorRepository
   }
 
   Optional<Instructor> findById(@Param("id") Long id);
+
+  List<Instructor> findAll();
 }

@@ -30,13 +30,11 @@ public class BookingController {
     @PathVariable int pageNumber,
     @PathVariable int pageSize
   ) {
-    String[] sort = { "bookingDate,desc" };
     PaginationFilter filter = new PaginationFilter(pageNumber, pageSize);
 
     List<BookingDTO> list = service.getAll(
       filter.getPageNumber(),
-      filter.getPageSize(),
-      sort
+      filter.getPageSize()
     );
 
     if (list == null) {

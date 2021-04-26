@@ -1,5 +1,6 @@
 package danceschool.javaversion.controller;
 
+import danceschool.javaversion.dto.SubscriptionDTO;
 import danceschool.javaversion.filter.PaginationFilter;
 import danceschool.javaversion.model.Subscription;
 import danceschool.javaversion.service.SubscriptionService;
@@ -7,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.HeadersBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,21 +28,19 @@ public class SubscriptionController {
   SubscriptionService service;
 
   @GetMapping
-  public List<Subscription> findAllSubscriptions(
+  public ResponseEntity<T> findAllSubscriptions(
     @PathVariable("pageNumber") int pageNumber,
     @PathVariable("pageSize") int pageSize
   ) {
     PaginationFilter filter = new PaginationFilter(pageNumber, pageSize);
-    List<Subscription> list = service.getAll(
+    List<SubscriptionDTO> list = service.getAll(
       filter.getPageNumber(),
       filter.getPageSize()
     );
 
-    if (list == null) {
-      return ResponseEntity.notFound().build();
-    } else {
-      return ResponseEntity.ok(list);
-    }
+    return list == null
+      ? ResponseEntity.notFound().build()
+      : ResponseEntity.ok(list);
   }
 
   @GetMapping("/{id}")
@@ -51,19 +51,19 @@ public class SubscriptionController {
   }
 
   @PostMapping
-  public Subscription saveSubscription(@RequestBody Subscription entity) {
+  public ResponseEntity<Long> saveSubscription(
+    @RequestBody Subscription entity
+  ) {
     Long id = service.create(entity);
     return ResponseEntity.ok(id);
   }
 
   @PutMapping
   public ResponseEntity updateSubscription(@RequestBody Subscription entity) {
-    Subscription updated = service.update(entity);
-    if (updated == null) {
-      return ResponseEntity.notFound().build();
-    } else {
-      return ResponseEntity.ok(updated);
-    }
+    boolean succeeded = service.update(entity);
+    return succeeded
+      ? (ResponseEntity<Object>) ResponseEntity.ok()
+      : ResponseEntity.notFound().build();
   }
 
   @DeleteMapping("/{id}")

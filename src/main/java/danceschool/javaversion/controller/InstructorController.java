@@ -4,9 +4,7 @@ import danceschool.javaversion.model.Instructor;
 import danceschool.javaversion.service.InstructorService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,7 +22,7 @@ public class InstructorController {
   InstructorService service;
 
   @GetMapping
-  public List<Instructor> findAllInstructors() {
+  public ResponseEntity findAllInstructors() {
     List<Instructor> list = service.getAll();
 
     if (list == null) {
@@ -39,22 +36,30 @@ public class InstructorController {
   public ResponseEntity<Instructor> findInstructorById(
     @PathVariable(value = "id") long id
   ) {
+    return null;
     // Implement
   }
 
+  //TODO
   @PostMapping
-  public Instructor saveInstructor(@RequestBody Instructor entity) {
-    Long id = service.create(entity);
-    return ResponseEntity.ok(id);
+  public ResponseEntity saveInstructor(@RequestBody Instructor entity) {
+    try {
+      Long id = service.create(entity);
+      return ResponseEntity.ok(id);
+    } catch (Exception e) {
+      //TODO
+      return null;
+    }
   }
 
   @PutMapping
   public ResponseEntity updateInstructor(@RequestBody Instructor entity) {
-    Instructor updated = service.update(entity);
-    if (updated == null) {
+    try {
+      service.update(entity);
+      return ResponseEntity.ok().build();
+    } catch (Exception e) {
+      //TODO
       return ResponseEntity.notFound().build();
-    } else {
-      return ResponseEntity.ok(updated);
     }
   }
 

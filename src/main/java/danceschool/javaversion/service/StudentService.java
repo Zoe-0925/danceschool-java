@@ -2,10 +2,8 @@ package danceschool.javaversion.service;
 
 import danceschool.javaversion.dto.StudentDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
-import danceschool.javaversion.helper.SortDirection;
 import danceschool.javaversion.model.Student;
 import danceschool.javaversion.repository.StudentRepository;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,24 +24,18 @@ public class StudentService {
   @Autowired
   StudentRepository repository;
 
-  @Cacheable
-  public List<Student> getAll(
-    int page, int size, String[] sort
-  ) {
-    List<Student> classes = new ArrayList<Student>();
+  @Cacheable // caches the result of findAll() method
+  public List<StudentDTO> getAll(int page, int pageSize) {
+    Pageable paging = PageRequest.of(page, pageSize, Sort.by("userName"));
 
-    // sort=[field, direction]
-    classes.add(new Student(SortDirection.getSortDirection(sort[1]), sort[0]));
-
-    Pageable pagingSort = PageRequest.of(page, size, Sort.by(userName));
-
-    List<StudentDTO> pages = repository
-      .findAll(pageReq)
+    List<StudentDTO> StudentList = repository
+      .findAll(paging)
+      .getContent()
       .stream()
       .map(this::convertToStudentDTO)
       .collect(Collectors.toList());
 
-    return pages.getContent();
+    return StudentList;
   }
 
   private StudentDTO convertToStudentDTO(Student student) {
@@ -52,15 +44,20 @@ public class StudentService {
 
   //TODO
   @Cacheable
-  public List<Student> findByName(String name) {}
+  public List<Student> findByName(String query) {
+    return repository.findByName(query);
+  }
+
+  @Cacheable
+  public Student findByEmail(String query) {
+    return repository.findByEmail(query).get();
+  }
 
   //TODO
   @Cacheable
-  public Student findByEmail(String email) {}
-
-  //TODO
-  @Cacheable
-  public String findEmailByBookingId(Long id) {}
+  public String findEmailByBookingId(Long id) {
+    return null;
+  }
 
   @CachePut
   public Long create(Student entity) throws Exception {
@@ -83,7 +80,7 @@ public class StudentService {
 
       newEntity = repository.save(newEntity);
     } else {
-     // throw new RecordNotFoundException("No Student record exist for given id");
+      // throw new RecordNotFoundException("No Student record exist for given id");
     }
   }
 
@@ -94,7 +91,9 @@ public class StudentService {
     if (Student.isPresent()) {
       repository.deleteById(id);
     } else {
-     // throw new RecordNotFoundException("No Student record exist for given id");
+      // throw new RecordNotFoundException("No Student record exist for given id");
     }
   }
+
+  public void delete(Long id) {}
 }

@@ -3,13 +3,13 @@ package danceschool.javaversion.service;
 import danceschool.javaversion.dto.CourseDTO;
 import danceschool.javaversion.dto.CourseWithCountDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
-import danceschool.javaversion.helper.SortDirection;
 import danceschool.javaversion.model.Course;
 import danceschool.javaversion.repository.CourseRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -27,23 +27,18 @@ public class CourseService {
   @Autowired
   CourseRepository repository;
 
-  @Cacheable
-  public List<CourseDTO> getAll(int page, int size, String[] sort) {
-    List<Course> courses = new ArrayList<Course>();
+  @Cacheable // caches the result of findAll() method
+  public List<CourseDTO> getAll(int page, int pageSize, int size) {
+    Pageable paging = PageRequest.of(page, pageSize, Sort.by("name"));
 
-    // sort=[field, direction]
-    courses.add(new Course(SortDirection.getSortDirection(sort[1]), sort[0]));
-
-    Pageable pagingSort = PageRequest.of(page, size, Sort.by(courses));
-
-    List<CourseDTO> result = repository
-      .findAll(pageReq)
+    List<CourseDTO> courseList = repository
+      .findAll(paging)
       .getContent()
       .stream()
       .map(this::convertToCourseDTO)
       .collect(Collectors.toList());
 
-    return result;
+    return courseList;
   }
 
   private CourseDTO convertToCourseDTO(Course course) {
@@ -52,16 +47,25 @@ public class CourseService {
 
   //TODO
   @Cacheable
-  public List<Course> findByName(String name) {}
+  public List<Course> findByName(String name) {
+    
+    return null;
+  }
 
   @Cacheable
   public CourseWithCountDTO findWithCount() {
-    List<Course> CourseList = repository.findAll();
+    Iterable<Course> courses = repository.findAll();
 
-    if (CourseList.size() > 0) {
-      return new CourseWithCountDTO(CourseList, CourseList.length());
+    List<CourseDTO> courseDTOList = StreamSupport
+      .stream(courses.spliterator(), false)
+      .map(this::convertToCourseDTO)
+      .collect(Collectors.toList());
+
+    //TODO
+    if (courseDTOList.size() > 0) {
+      return new CourseWithCountDTO(courseDTOList, courseDTOList.size());
     } else {
-      return new CourseWithCountDTO(new ArrayList<Course>(), 0);
+      return null;
     }
   }
 
@@ -76,20 +80,19 @@ public class CourseService {
   }
 
   @CachePut
-  public Course Update(Course course) throws RecordNotFoundException {
+  public boolean update(Course course) throws RecordNotFoundException {
     Optional<Course> entity = repository.findById(course.getId());
 
     if (entity.isPresent()) {
       Course newEntity = entity.get();
-      newEntity.setName(entity.getName());
-      newEntity.setPrice(entity.getPrice());
-      newEntity.setInstructorID(entity.getInstructorID());
-      newEntity.setBookingLimit(entity.getBookingLimit());
-
+      newEntity.setName(course.getName());
+      newEntity.setPrice(course.getPrice());
+      newEntity.setInstructorID(course.getInstructorID());
+      newEntity.setBookingLimit(course.getBookingLimit());
       newEntity = repository.save(newEntity);
-      return newEntity;
+      return true;
     } else {
-      return null;
+      return false;
     }
   }
 
@@ -100,7 +103,7 @@ public class CourseService {
     if (Course.isPresent()) {
       repository.deleteById(id);
     } else {
-     // throw new RecordNotFoundException("No Course record exist for given id");
+      // throw new RecordNotFoundException("No Course record exist for given id");
     }
   }
 }
