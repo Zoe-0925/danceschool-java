@@ -6,9 +6,7 @@ import danceschool.javaversion.model.Membership;
 import danceschool.javaversion.model.Subscription;
 import danceschool.javaversion.repository.MembershipRepository;
 import danceschool.javaversion.repository.SubscriptionRepository;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,18 +54,15 @@ public class SubscriptionService {
     return repository.getCount();
   }
 
-
   @CachePut
-  public Long create(Subscription entity)  {
-    try {
-      entity = repository.save(entity);
+  public Long create(Subscription entity) {
+    entity = repository.save(entity);
 
-      Optional<Membership> membership = membershipRepository.findById(
-        entity.getMembershipID()
-      );
-      membership.get().getSubscription().add(entity);
-      return entity.getId();
-    } 
+    Optional<Membership> membership = membershipRepository.findById(
+      entity.getMembershipID()
+    );
+    membership.get().getSubscription().add(entity);
+    return entity.getId();
   }
 
   @CachePut
@@ -85,12 +80,12 @@ public class SubscriptionService {
 
       return true;
     } else {
-     return false;
+      return false;
     }
   }
 
   @CacheEvict(allEntries = true)
-  public void unsubscribe(Long id) throws RecordNotFoundException {
+  public boolean unsubscribe(Long id) throws RecordNotFoundException {
     Optional<Subscription> entity = repository.findById(id);
 
     if (entity != null) {
@@ -99,10 +94,9 @@ public class SubscriptionService {
         entity.get().getMembershipID()
       );
       membership.get().getSubscription().remove(membership);
+      return true;
     } else {
-      /**     throw new RecordNotFoundException(
-        "No Subscription record exist for given id", RuntimeException e
-      );*/
+      return false;
     }
   }
 }
