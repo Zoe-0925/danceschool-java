@@ -1,23 +1,24 @@
 # Dance School RESTful API
 ### Java Spring Boot, JPA, Hibernete, SQL, Firebase Authentication, Mavern, Lombok
 
-An ASP.NET core web application designed for a small business that runs a dance school. <br />
+A coding challenge developed in 2 days as the java version of an existing ASP.NET Core Web API developed by me.<br />
+The <a href="https://github.com/Zoe-0925/dance-school">ASP.NET Core Version and live demo </a> are here. <br /><br />
+
+The Java Spring Boot back end of a web application designed for a small business that runs a dance school. <br />
 It includes an admin web portal for the business owner to view a dashboard and conduct CRUD operations.<br />
 It also includes a student protal for students to book classes and subscribe to memberships. <br />
 The users roles include the dance school owner (admin) and students. <br />
  <br /> <br />
-The <a href="https://github.com/Zoe-0925/dance-school">ASP.NET Core Version and live demo </a> are here. <br />
 
 ## Table of Contents
 1. [ API Documentation (Swagger) ](#API)
-2. [ Demo ](#Demo) 
-3. [ Feature Highlights ](#Feature)
-4. [ Maintainability ](#Maintainability)
-5. [ Security ](#Security)
-6. [ Scalability ](#Scalability)
-7. [ Tech Stack ](#Tech)
-8. [ Design Patterns ](#Design)
-9. [ How to run the program locally ](#Run)
+2. [ Feature Highlights ](#Feature)
+3. [ Maintainability ](#Maintainability)
+4. [ Security ](#Security)
+5. [ Scalability ](#Scalability)
+6. [ Tech Stack ](#Tech)
+7. [ Design Patterns ](#Design)
+8. [ How to run the program locally ](#Run)
 
 <a name="API"></a>
 ## API Documentation (Swagger)
@@ -41,46 +42,38 @@ The <a href="https://github.com/Zoe-0925/dance-school">ASP.NET Core Version and 
 ### Maintainability
 | Technology | Description |
 | ----------- | ----------- |
-| Entity Framework Core | Code-first object relational mapping for Code-first object relational mapping |
+| Domain-Driven Design | Separated SQL queries from business logics through the repository pattern to encapsulate implementation details |
 | Swagger API Documentation | Documented the API and multiple error response codes |
 | OOP and DI | Abstracted duplicated codes into middlewares |
-| React.js Hooks| Seperate reusable view components from hooks to ensure testability |
-| SASS | Moduarlized and extendable style sheets management for for efficient UI styling update |
+| Lombok | Reduced redundant codes in object oriented programming |
 
 <a name="Security"></a>
 ### Security and Robustness
 | Technology | Description |
 | ----------- | ----------- |
 | Firebase Auth | Authentication and role-based authorization implemented with middlewares to filter unauthenticated requests |
-| Error handlings and Validations | Customised error response codes for business logics and fast client-side Formik validations |
+| Error handlings and Validations | Customised error response codes for business logics and model validations for data integrity |
 | SQL Stored Procedures | Prevent SQL injection |
 
 <a name="Scalability"></a>
 ### Scalability and Performance
 | Technology | Description |
 | ----------- | ----------- |
-| CQRS and Mediatr | Decouple the business logics from data access logics to meet business requirements flexiblely |
-| In-memory Caching | The Redis Database is utilised to boost query performance |
-| Pagination and Lazy loading | Fasten the loading time even with a huge amount of data |
-| Complex front end state management | Keep small local states to minimise rerendering in React.js |
+| In-memory Caching | The Java Spring Boot Caching is utilised to boost query performance |
+| Pagination | Fasten the loading time even with a huge amount of data |
 | Advanced SQL | Restrict necessary data fields returned from the server. Map "1-to-many" relationships. Minimise database oprations with batch queries. |
-| Deployment | Azure SQL and Azure service app |
-| CI/CD | Github Actions |
 
 <a name="Tech"></a>
 ## Tech Stack:
-Front End: React.js, Redux Thunk, SASS, Material-UI, Formik, Firebase Authentication <br />
-Back End: ASP.NET Core 5.0, Entity Framework Core, SQL Server, Linq, Redis, Firebase Authentication, Azure Deployment <br />
+Back End: Java Spring Boot, JPA, Hibernete, SQL, Firebase Authentication, Mavern, Lombok <br />
 
 <a name="Design"></a>
 ## Design Patterns:
-- The Clean Architecture
-- Asp.Net MVC
-- CQRS
-- Mediatr
-- React Higher Order Components
-- Redux
-- Progressive Web Application with Redis Cache
+- Spring MVC
+- Repository
+- Dependency Injection
+- Autowired Singletons
+- Progressive Web Application with Spring Boot Caching
 
 <a name="Run"></a>
 ## How to run the program locally:
@@ -88,25 +81,4 @@ First, create a firebase project to acquire your firebase authentication API cre
 Then, set up your local SQL server and Redis to achieve connection strings.<br />
 Alternatively, you can set up Azure SQL and Azure Redis Cache via <a href="https://azure.microsoft.com/en-au/features/azure-portal/">Azure Portal</a>.<br />
 <br />
-Replace connection strings in the "/danceschool/appsetting.json" and the "/danceschool/Context/ApplicationContext.cs" files before running the following commands. 
-<br /><br />
-Note that the server is running in the production mode. <br />
-In order to run in the development mode, please replace the "production" keyword to "development" in the "daneschool/properties/launchsetting.json".
-<br /><br />
-Double click the `danceschool.sln` to open Visual Studio <br />
-Open the terminal,
-Change directory to the project root folder. <br />
-Then run the following.  <br />
-
-`cd danceschool` <br />
-`dotnet restore`<br />
-`cd Client` <br />
-`npm install` <br /> 
-`npm start` <br /> 
-`cd ..` <br />
-`dotnet run`. <br />
-
-Then open [http://localhost:3000](http://localhost:3000) to view it in the browser.<br />
- <br />
-To view the Swagger API documentation, <br />
-Open [https://localhost:5001/swagger/index.html](https://localhost:5001/swagger/index.html)
+Coming soon.<br />
