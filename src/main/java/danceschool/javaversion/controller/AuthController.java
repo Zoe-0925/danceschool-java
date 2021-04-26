@@ -29,7 +29,7 @@ public class AuthController {
   StudentService studentService;
 
   @PostMapping("/sign-up")
-  public ResponseEntity signUp(@RequestBody SignUpRequest request)
+  public ResponseEntity<?> signUp(@RequestBody SignUpRequest request)
     throws Exception {
     CreateRequest args = new CreateRequest()
       .setEmail(request.getEmail())
@@ -47,11 +47,11 @@ public class AuthController {
 
     Student student = new Student(request.getUserName(), request.getEmail());
     Long studentId = studentService.create(student);
-    return (ResponseEntity) ResponseEntity.ok(studentId);
+    return ResponseEntity.ok(studentId);
   }
 
   @PostMapping("/verify")
-  public ResponseEntity verifyToken(@RequestBody Token idToken)
+  public ResponseEntity<?> verifyToken(@RequestBody Token idToken)
     throws FirebaseAuthException, Exception {
     String role = service.getRoleFromToken(idToken.getIdToken());
     return ResponseEntity.ok(role);
