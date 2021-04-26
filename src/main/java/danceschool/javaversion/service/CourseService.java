@@ -29,42 +29,46 @@ public class CourseService {
   @Cacheable // caches the result of findAll() method
   public List<CourseDTO> getAll(int page, int pageSize) {
     Pageable paging = PageRequest.of(page, pageSize, Sort.by("name"));
-
-    List<CourseDTO> courseList = repository
-      .findAll(paging)
-      .getContent()
-      .stream()
-      .map(this::convertToCourseDTO)
-      .collect(Collectors.toList());
-
-    return courseList;
+    List<Course> courses = repository.findAll(paging).getContent();
+    return listToDTO(courses);
   }
 
   private CourseDTO convertToCourseDTO(Course course) {
     return new CourseDTO(course);
   }
 
-  @Cacheable
-  public List<CourseDTO> findByName(String name) {
-    return repository
-      .findByName(name)
+  private List<CourseDTO> iterableToDTO(Iterable<Course> courses) {
+    return StreamSupport
+      .stream(courses.spliterator(), false)
+      .map(this::convertToCourseDTO)
+      .collect(Collectors.toList());
+  }
+
+  private List<CourseDTO> listToDTO(List<Course> courses) {
+    return courses
       .stream()
       .map(this::convertToCourseDTO)
       .collect(Collectors.toList());
   }
 
   @Cacheable
-  public CourseWithCountDTO findWithCount() {
-    Iterable<Course> courses = repository.findAll();
-
-    List<CourseDTO> courseDTOList = StreamSupport
-      .stream(courses.spliterator(), false)
-      .map(this::convertToCourseDTO)
-      .collect(Collectors.toList());
-
-    return new CourseWithCountDTO(courseDTOList, courseDTOList.size());
+  public int getTotal() {
+    return repository.getCount();
   }
 
+  @Cacheable
+  public List<CourseDTO> findByName(String name) {
+    List<Course> courses = repository.findByName(name);
+    return listToDTO(courses);
+  }
+
+  @Cacheable
+  public CourseWithCountDTO findWithCount() {
+    Iterable<Course> courses = repository.findAll();
+    List<CourseDTO> courseDTOList = iterableToDTO(courses);
+    return new CourseWithCountDTO(courseDTOList, courseDTOList.size());
+  }
+  
   @CachePut
   public Long create(Course entity) throws Exception {
     try {

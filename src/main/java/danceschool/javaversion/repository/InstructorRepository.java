@@ -1,5 +1,6 @@
 package danceschool.javaversion.repository;
 
+import danceschool.javaversion.dto.InstructorIDWithCountDTO;
 import danceschool.javaversion.model.Instructor;
 import java.util.List;
 import java.util.Optional;
@@ -23,4 +24,7 @@ public interface InstructorRepository
   Optional<Instructor> findById(@Param("id") Long id);
 
   List<Instructor> findAll();
+
+  @Query("select i.id, top 3 Count(*) as count from Instructor i right outer join Booking b on i.id= b.classId group by b.classId order by count DESC")
+  List<InstructorIDWithCountDTO> getTop();
 }

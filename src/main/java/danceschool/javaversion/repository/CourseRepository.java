@@ -15,4 +15,7 @@ public interface CourseRepository
   List<Course> findByName(@Param("name") String name);
 
   Optional<Course> findById(Long id);
+
+  @Query("select Count(*) from Course")
+  int getCount();
 }

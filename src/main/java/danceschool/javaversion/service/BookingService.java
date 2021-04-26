@@ -2,6 +2,8 @@ package danceschool.javaversion.service;
 
 import danceschool.javaversion.dto.BookingCountDTO;
 import danceschool.javaversion.dto.BookingDTO;
+import danceschool.javaversion.dto.CountByDate;
+import danceschool.javaversion.dto.MembershipNameWithCountDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.model.Booking;
 import danceschool.javaversion.model.DanceClass;
@@ -72,10 +74,10 @@ public class BookingService {
   @Cacheable
   public List<BookingDTO> getByStudent(Long id) {
     return repository
-    .getByStudent(id)
-    .stream()
-    .map(this::convertToBookingDTO)
-    .collect(Collectors.toList());
+      .getByStudent(id)
+      .stream()
+      .map(this::convertToBookingDTO)
+      .collect(Collectors.toList());
   }
 
   @Cacheable
@@ -90,10 +92,29 @@ public class BookingService {
     return new BookingCountDTO(bookingList, bookingList.size());
   }
 
+  public List<Integer> getTopDanceClassIDs() {
+    return repository.getTopDanceClassIDs();
+  }
+
   //TODO
   @Cacheable
   public int findBookingCountByMonth() {
     return 0;
+  }
+
+  @Cacheable
+  public int getTotal() {
+    return repository.getCount();
+  }
+
+  @Cacheable
+  public List<CountByDate> getLastWeeksBookings() {
+    return repository.getLastWeeksBookings();
+  }
+
+  @Cacheable
+  public List<MembershipNameWithCountDTO> getByMembership() {
+    return repository.getByMembership();
   }
 
   //TODO

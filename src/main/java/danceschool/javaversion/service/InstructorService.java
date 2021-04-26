@@ -1,5 +1,6 @@
 package danceschool.javaversion.service;
 
+import danceschool.javaversion.dto.InstructorIDWithCountDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.model.Instructor;
 import danceschool.javaversion.repository.InstructorRepository;
@@ -29,9 +30,15 @@ public class InstructorService {
     }
   }
 
+  @Cacheable
+  public List<InstructorIDWithCountDTO> getTop() {
+    return repository.getTop();
+  }
+
   //TODO
   public List<Instructor> findByName(String name) {
-    return null;}
+    return null;
+  }
 
   public Long create(Instructor entity) throws Exception {
     try {
@@ -75,6 +82,5 @@ public class InstructorService {
     }
   }
 
-public void delete(Long id) {
-}
+  public void delete(Long id) {}
 }

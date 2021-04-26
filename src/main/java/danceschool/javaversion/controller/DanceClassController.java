@@ -54,7 +54,7 @@ public class DanceClassController {
   public ResponseEntity<?> updateDanceClass(@RequestBody DanceClass entity) {
     boolean succeeded = service.update(entity);
     return succeeded
-      ? ResponseEntity.ok().build()
+      ? ResponseEntity.noContent().build()
       : ResponseEntity.notFound().build();
   }
 

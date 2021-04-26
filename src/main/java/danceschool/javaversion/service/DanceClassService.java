@@ -9,6 +9,7 @@ import danceschool.javaversion.repository.DanceClassRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -37,24 +38,47 @@ public class DanceClassService {
       Sort.by("startDate").descending()
     );
 
-    List<DanceClassDTO> classList = repository
-      .findAll(paging)
-      .getContent()
-      .stream()
-      .map(this::convertToDanceClassDTO)
-      .collect(Collectors.toList());
+    List<DanceClass> classes = repository.findAll(paging).getContent();
 
-    return classList;
+    return listToDTO(classes);
   }
 
   private DanceClassDTO convertToDanceClassDTO(DanceClass danceClass) {
     return new DanceClassDTO(danceClass);
   }
 
-  //TODO
+  private List<DanceClassDTO> iterableToDTO(Iterable<DanceClass> classes) {
+    return StreamSupport
+      .stream(classes.spliterator(), false)
+      .map(this::convertToDanceClassDTO)
+      .collect(Collectors.toList());
+  }
+
+  private List<DanceClassDTO> listToDTO(List<DanceClass> classes) {
+    return classes
+      .stream()
+      .map(this::convertToDanceClassDTO)
+      .collect(Collectors.toList());
+  }
+
+  public List<DanceClassDTO> getByIds(List<Integer> ids) {
+    List<DanceClass> danceClasses = repository.getByIds(ids);
+    return listToDTO(danceClasses);
+  }
+
   @Cacheable
-  public List<DanceClass> findByCourse(Long id) {
-    return repository.findByCourse(id);
+  public List<DanceClassDTO> getTop() {
+    return repository
+      .getTop()
+      .stream()
+      .map(this::convertToDanceClassDTO)
+      .collect(Collectors.toList());
+  }
+
+  @Cacheable
+  public List<DanceClassDTO> findByCourse(Long id) {
+    List<DanceClass> danceClasses = repository.findByCourse(id);
+    return listToDTO(danceClasses);
   }
 
   @CachePut

@@ -42,6 +42,11 @@ public class StudentService {
     return new StudentDTO(student);
   }
 
+  @Cacheable
+  public int getTotal() {
+    return repository.getCount();
+  }
+
   //TODO
   @Cacheable
   public List<Student> findByName(String query) {

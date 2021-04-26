@@ -51,6 +51,12 @@ public class SubscriptionService {
     return new SubscriptionDTO(subscription);
   }
 
+  @Cacheable
+  public int getTotal() {
+    return repository.getCount();
+  }
+
+
   @CachePut
   public Long create(Subscription entity)  {
     try {

@@ -6,7 +6,6 @@ import danceschool.javaversion.service.MembershipService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,12 +41,10 @@ public class MembershipController {
 
   @PutMapping
   public ResponseEntity updateMembership(@RequestBody Membership entity) {
-    try {
-      service.update(entity);
-      return (ResponseEntity) ResponseEntity.ok();
-    } catch (Exception e) {
-      return ResponseEntity.notFound().build();
-    }
+    boolean succeeded = service.update(entity);
+    return succeeded
+      ? ResponseEntity.noContent().build()
+      : ResponseEntity.notFound().build();
   }
 
   //TODO
@@ -55,9 +52,9 @@ public class MembershipController {
   public ResponseEntity<?> deleteMembership(@PathVariable("id") Long id) {
     try {
       service.deleteMembership(id);
-      return ResponseEntity.ok().build();
+      return ResponseEntity.noContent().build();
     } catch (Exception e) {
-      return ResponseEntity.notFound().build(); //TODO update the error
+      return ResponseEntity.notFound().build(); 
     }
   }
 }

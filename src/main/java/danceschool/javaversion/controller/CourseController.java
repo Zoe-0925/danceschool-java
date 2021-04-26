@@ -5,11 +5,8 @@ import danceschool.javaversion.filter.PaginationFilter;
 import danceschool.javaversion.model.*;
 import danceschool.javaversion.service.CourseService;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +30,6 @@ public class CourseController {
   ) {
     PaginationFilter filter = new PaginationFilter(pageNumber, pageSize);
 
-    //TODO add sort by what
     List<CourseDTO> list = service.getAll(
       filter.getPageNumber(),
       filter.getPageSize()
@@ -64,10 +60,10 @@ public class CourseController {
   }
 
   @GetMapping("/search/{name}")
-  public ResponseEntity<List<Course>> findCourseByName(
+  public ResponseEntity<?> findCourseByName(
     @PathVariable(value = "id") String name
   ) {
-    List<Course> courses = service.findByName(name);
+    List<CourseDTO> courses = service.findByName(name);
     return ResponseEntity.ok(courses);
   }
 
@@ -83,12 +79,10 @@ public class CourseController {
 
   @PutMapping
   public ResponseEntity<?> updateCourse(@RequestBody Course entity) {
-    try {
-      service.update(entity);
-      return (ResponseEntity) ResponseEntity.ok();
-    } catch (Exception e) {
-      return ResponseEntity.notFound().build();
-    }
+    boolean succeeded = service.update(entity);
+    return succeeded
+      ? ResponseEntity.noContent().build()
+      : ResponseEntity.notFound().build();
   }
 
   @DeleteMapping("/{id}")

@@ -54,7 +54,7 @@ public class MembershipService {
   }
 
   @CachePut
-  public void update(Membership entity) throws RecordNotFoundException {
+  public boolean update(Membership entity) {
     Optional<Membership> membership = repository.findById(entity.getId());
 
     if (membership.isPresent()) {
@@ -64,10 +64,9 @@ public class MembershipService {
       newEntity.setPrice(entity.getPrice());
 
       newEntity = repository.save(newEntity);
+      return true;
     } else {
-      /**   throw new RecordNotFoundException(
-        "No Membership record exist for given id"
-      );*/
+      return false;
     }
   }
 
