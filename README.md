@@ -27,7 +27,7 @@ The users roles include the dance school owner (admin) and students. <br />
 | ----------- | ----------- |
 | Logging | Capture errors from database and business logic to better audit the server |
 | Deployment | Set up CI/CD pipelines for production |
-| Error Handling | Set up CI/CD pipelines for production |
+| Error Handling | Apply built-in and custom Exceptions to enhance program transperency |
 | Design Patterns | Apply common design patterns to reduce code redundancy |
 
 <a name="Feature"></a>
