@@ -36,7 +36,7 @@ The users roles include the dance school owner (admin) and students. <br />
 ### Maintainability
 | Technology | Description |
 | ----------- | ----------- |
-| Domain-Driven Design | Separated SQL queries from business logics through the repository pattern to encapsulate implementation details |
+| Domain-Driven Design | Encapsulation via seperating SQL queries from business logics through the repository pattern |
 | Swagger API Documentation | Documented the API and multiple error response codes |
 | OOP and DI | Abstracted duplicated codes into middlewares |
 | Lombok | Reduced redundant codes in object oriented programming |
