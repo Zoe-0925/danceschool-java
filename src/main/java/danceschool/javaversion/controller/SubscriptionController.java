@@ -28,7 +28,7 @@ public class SubscriptionController {
   SubscriptionService service;
 
   @GetMapping
-  public ResponseEntity<T> findAllSubscriptions(
+  public ResponseEntity<?> findAllSubscriptions(
     @PathVariable("pageNumber") int pageNumber,
     @PathVariable("pageSize") int pageSize
   ) {
@@ -43,13 +43,6 @@ public class SubscriptionController {
       : ResponseEntity.ok(list);
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<Subscription> findSubscriptionById(
-    @PathVariable(value = "id") long id
-  ) {
-    // Implement
-  }
-
   @PostMapping
   public ResponseEntity<Long> saveSubscription(
     @RequestBody Subscription entity
@@ -59,16 +52,16 @@ public class SubscriptionController {
   }
 
   @PutMapping
-  public ResponseEntity updateSubscription(@RequestBody Subscription entity) {
+  public ResponseEntity<?> updateSubscription(
+    @RequestBody Subscription entity
+  ) {
     boolean succeeded = service.update(entity);
-    return succeeded
-      ? (ResponseEntity<Object>) ResponseEntity.ok()
-      : ResponseEntity.notFound().build();
+    return succeeded ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity deleteSubscription(@PathVariable("id") Long id) {
-    service.delete(id);
+  public ResponseEntity<?> deleteSubscription(@PathVariable("id") Long id) {
+    service.unsubscribe(id);
 
     return ResponseEntity.noContent().build();
   }

@@ -5,7 +5,6 @@ import danceschool.javaversion.dto.CourseWithCountDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.model.Course;
 import danceschool.javaversion.repository.CourseRepository;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,7 +27,7 @@ public class CourseService {
   CourseRepository repository;
 
   @Cacheable // caches the result of findAll() method
-  public List<CourseDTO> getAll(int page, int pageSize, int size) {
+  public List<CourseDTO> getAll(int page, int pageSize) {
     Pageable paging = PageRequest.of(page, pageSize, Sort.by("name"));
 
     List<CourseDTO> courseList = repository
@@ -45,11 +44,13 @@ public class CourseService {
     return new CourseDTO(course);
   }
 
-  //TODO
   @Cacheable
-  public List<Course> findByName(String name) {
-    
-    return null;
+  public List<CourseDTO> findByName(String name) {
+    return repository
+      .findByName(name)
+      .stream()
+      .map(this::convertToCourseDTO)
+      .collect(Collectors.toList());
   }
 
   @Cacheable
@@ -61,12 +62,7 @@ public class CourseService {
       .map(this::convertToCourseDTO)
       .collect(Collectors.toList());
 
-    //TODO
-    if (courseDTOList.size() > 0) {
-      return new CourseWithCountDTO(courseDTOList, courseDTOList.size());
-    } else {
-      return null;
-    }
+    return new CourseWithCountDTO(courseDTOList, courseDTOList.size());
   }
 
   @CachePut

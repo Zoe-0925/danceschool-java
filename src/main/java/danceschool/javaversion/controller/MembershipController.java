@@ -1,5 +1,6 @@
 package danceschool.javaversion.controller;
 
+import danceschool.javaversion.dto.MembershipDTO;
 import danceschool.javaversion.model.Membership;
 import danceschool.javaversion.service.MembershipService;
 import java.util.List;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,14 +24,9 @@ public class MembershipController {
   MembershipService service;
 
   @GetMapping
-  public ResponseEntity findAll() {
-    List<Membership> list = service.getAll();
-
-    if (list == null) {
-      return ResponseEntity.notFound().build();
-    } else {
-      return ResponseEntity.ok(list);
-    }
+  public ResponseEntity<?> findAll() {
+    List<MembershipDTO> list = service.getAll();
+    return ResponseEntity.ok(list);
   }
 
   @PostMapping
@@ -57,10 +52,10 @@ public class MembershipController {
 
   //TODO
   @DeleteMapping("/{id}")
-  public ResponseEntity deleteMembership(@PathVariable("id") Long id) {
+  public ResponseEntity<?> deleteMembership(@PathVariable("id") Long id) {
     try {
       service.deleteMembership(id);
-      return (ResponseEntity) ResponseEntity.ok();
+      return ResponseEntity.ok().build();
     } catch (Exception e) {
       return ResponseEntity.notFound().build(); //TODO update the error
     }

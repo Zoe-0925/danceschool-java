@@ -1,6 +1,7 @@
 package danceschool.javaversion.service;
 
 import danceschool.javaversion.exception.RecordNotFoundException;
+import danceschool.javaversion.dto.DanceClassDTO;
 import danceschool.javaversion.dto.Dashboard;
 import danceschool.javaversion.repository.DashboardRepository;
 import java.util.ArrayList;
@@ -23,5 +24,10 @@ public class DashboardService {
 
     
     //TODO
+  }
+
+  public boolean update(DanceClassDTO danceClassDTO){
+
+    
   }
 }

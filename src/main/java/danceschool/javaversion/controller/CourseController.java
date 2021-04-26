@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,7 +27,7 @@ public class CourseController {
   CourseService service;
 
   @GetMapping("page/{pageNumber}/size/{pageSize}/")
-  public ResponseEntity findAllCourses(
+  public ResponseEntity<?> findAllCourses(
     @PathVariable("pageNumber") int pageNumber,
     @PathVariable("pageSize") int pageSize
   ) {
@@ -37,8 +36,7 @@ public class CourseController {
     //TODO add sort by what
     List<CourseDTO> list = service.getAll(
       filter.getPageNumber(),
-      filter.getPageSize(),
-      null
+      filter.getPageSize()
     );
 
     if (list == null) {
@@ -49,24 +47,20 @@ public class CourseController {
   }
 
   @GetMapping("page/{pageNumber}/size/{pageSize}/")
-  public ResponseEntity findAllBookings(
+  public ResponseEntity<?> findAllBookings(
     @PathVariable int pageNumber,
     @PathVariable int pageSize
   ) {
-    String[] sort = { "name,asc" };
     PaginationFilter filter = new PaginationFilter(pageNumber, pageSize);
 
     List<CourseDTO> list = service.getAll(
       filter.getPageNumber(),
-      filter.getPageSize(),
-      sort
+      filter.getPageSize()
     );
 
-    if (list == null) {
-      return ResponseEntity.notFound().build();
-    } else {
-      return ResponseEntity.ok(list);
-    }
+    return list == null
+      ? ResponseEntity.notFound().build()
+      : ResponseEntity.ok(list);
   }
 
   @GetMapping("/search/{name}")
@@ -88,7 +82,7 @@ public class CourseController {
   }
 
   @PutMapping
-  public ResponseEntity updateCourse(@RequestBody Course entity) {
+  public ResponseEntity<?> updateCourse(@RequestBody Course entity) {
     try {
       service.update(entity);
       return (ResponseEntity) ResponseEntity.ok();
@@ -98,7 +92,7 @@ public class CourseController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity deleteCourse(@PathVariable("id") Long id) {
+  public ResponseEntity<?> deleteCourse(@PathVariable("id") Long id) {
     service.delete(id);
 
     return ResponseEntity.noContent().build();

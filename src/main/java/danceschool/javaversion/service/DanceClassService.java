@@ -2,12 +2,10 @@ package danceschool.javaversion.service;
 
 import danceschool.javaversion.dto.DanceClassDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
-import danceschool.javaversion.helper.SortDirection;
 import danceschool.javaversion.model.Course;
 import danceschool.javaversion.model.DanceClass;
 import danceschool.javaversion.repository.CourseRepository;
 import danceschool.javaversion.repository.DanceClassRepository;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,7 +14,6 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -76,7 +73,7 @@ public class DanceClassService {
   }
 
   @CachePut
-  public DanceClass Update(DanceClass entity) throws RecordNotFoundException {
+  public boolean update(DanceClass entity) throws RecordNotFoundException {
     Optional<DanceClass> danceClass = repository.findById(entity.getId());
 
     if (danceClass.isPresent()) {
@@ -85,10 +82,9 @@ public class DanceClassService {
       newEntity.setEndTime(entity.getEndTime());
       newEntity.setCourseName(entity.getCourseName());
       newEntity = repository.save(newEntity);
-
-      return newEntity;
+      return true;
     } else {
-      return null;
+      return false;
     }
   }
 
@@ -97,7 +93,7 @@ public class DanceClassService {
     Optional<DanceClass> danceClass = repository.findById(id);
 
     if (danceClass.isPresent()) {
-      DanceClass entity = danceClass.get();
+      // DanceClass entity = danceClass.get();
       repository.deleteById(id);
       // Course course = courseRepository.findById(entity.getCourseID);
       //  course.getDanceClassess.remove(entity);

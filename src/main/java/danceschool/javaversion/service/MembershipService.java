@@ -4,10 +4,10 @@ import danceschool.javaversion.dto.MembershipDTO;
 import danceschool.javaversion.exception.RecordNotFoundException;
 import danceschool.javaversion.model.Membership;
 import danceschool.javaversion.repository.MembershipRepository;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -23,10 +23,11 @@ public class MembershipService {
   MembershipRepository repository;
 
   @Cacheable
-  public List<Membership> getAll() {
-    List<Membership> membershipList = repository
-      .findAll()
-      .stream()
+  public List<MembershipDTO> getAll() {
+    Iterable<Membership> memberships = repository.findAll();
+
+    List<MembershipDTO> membershipList = StreamSupport
+      .stream(memberships.spliterator(), false)
       .map(this::convertToMembershipDTO)
       .collect(Collectors.toList());
 
@@ -64,7 +65,7 @@ public class MembershipService {
 
       newEntity = repository.save(newEntity);
     } else {
-    /**   throw new RecordNotFoundException(
+      /**   throw new RecordNotFoundException(
         "No Membership record exist for given id"
       );*/
     }
@@ -77,7 +78,7 @@ public class MembershipService {
     if (Membership.isPresent()) {
       repository.deleteById(id);
     } else {
-     /** throw new RecordNotFoundException(
+      /** throw new RecordNotFoundException(
         "No Membership record exist for given id"
       );*/
     }
