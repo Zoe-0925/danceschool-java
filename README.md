@@ -11,17 +11,24 @@ The users roles include the dance school owner (admin) and students. <br />
  <br /> <br />
 
 ## Table of Contents
-1. [ API Documentation (Swagger) ](#API)
-2. [ Feature Highlights ](#Feature)
-3. [ Maintainability ](#Maintainability)
-4. [ Security ](#Security)
-5. [ Scalability ](#Scalability)
-6. [ Tech Stack ](#Tech)
-7. [ Design Patterns ](#Design)
-8. [ How to run the program locally ](#Run)
+1. [ Future Plans and Improvements ](#Plans)
+2. [ API Documentation (Swagger) ](#API)
+3. [ Feature Highlights ](#Feature)
+4. [ Maintainability ](#Maintainability)
+5. [ Security ](#Security)
+6. [ Scalability ](#Scalability)
+7. [ Tech Stack ](#Tech)
+8. [ Design Patterns ](#Design)
+9. [ How to run the program locally ](#Run)
 
-<a name="API"></a>
-## API Documentation (Swagger)
+<a name="Plans"></a>
+## Future Plans and Improvements
+| Task | Purpose |
+| ----------- | ----------- |
+| Logging | Capture errors from database and business logic to better audit the server |
+| Deployment | Set up CI/CD pipelines for production |
+| Error Handling | Set up CI/CD pipelines for production |
+| Design Patterns | Apply common design patterns to reduce code redundancy |
 
 <a name="Feature"></a>
 ## Feature Highlights
@@ -30,6 +37,9 @@ The users roles include the dance school owner (admin) and students. <br />
 - Allow the admin user full access on CURD operations.
 - Allow the student role to view public data such as courses, membrships
 - Allow the student role to book dance classes and subscribe to memberships
+
+<a name="API"></a>
+## API Documentation (Swagger)
 
 ## Development Highlights
 <a name="Maintainability"></a>
@@ -72,7 +82,7 @@ Back End: Java Spring Boot, JPA, Hibernete, SQL, Firebase Authentication, Mavern
 <a name="Run"></a>
 ## How to run the program locally:
 First, create a firebase project to acquire your firebase authentication API credentials from  <a href="https://firebase.google.com/">Firebase Console</a>.<br />
-Then, set up your local SQL server and Redis to achieve connection strings.<br />
-Alternatively, you can set up Azure SQL and Azure Redis Cache via <a href="https://azure.microsoft.com/en-au/features/azure-portal/">Azure Portal</a>.<br />
+Then, set up your local SQL server to achieve connection strings.<br />
+Alternatively, you can set up Azure SQL via <a href="https://azure.microsoft.com/en-au/features/azure-portal/">Azure Portal</a>.<br />
 <br />
 Coming soon.<br />
