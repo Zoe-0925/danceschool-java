@@ -1,7 +1,7 @@
 # Dance School RESTful API
 ### Java Spring Boot, JPA, Hibernete, SQL, Firebase Authentication, Mavern, Lombok
 
-A coding challenge developed in 2 days as the java version of an existing ASP.NET Core Web API developed by me.<br />
+A coding challenge developed in 2 days as the java version of an existing ASP.NET Core Web API that I developed.<br />
 The <a href="https://github.com/Zoe-0925/dance-school">ASP.NET Core Version and live demo </a> are here. <br /><br />
 
 The Java Spring Boot back end of a web application designed for a small business that runs a dance school. <br />
