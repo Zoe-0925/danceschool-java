@@ -63,7 +63,7 @@ The users roles include the dance school owner (admin) and students. <br />
 ### Scalability and Performance
 | Technology | Description |
 | ----------- | ----------- |
-| In-memory Caching | The Java Spring Boot Caching is utilised to boost query performance |
+| Redis Caching | The Java Spring Boot Caching is utilised to boost query performance |
 | Pagination | Fasten the loading time even with a huge amount of data |
 | Advanced SQL | Restrict necessary data fields returned from the server. Map "1-to-many" relationships. Minimise database oprations with batch queries. |
 
